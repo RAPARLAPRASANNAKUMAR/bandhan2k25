@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bandhan - 2K25</title>
+    <title>Aikya - 2K25</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,7 +105,7 @@
             box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
         }
         #home::before {
-            content: 'Bandhan-2K25';
+            content: 'Aikya-2K25';
             font-family: 'Anton', sans-serif;
             position: absolute;
             top: 50%;
@@ -158,9 +158,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-        .dropdown-menu {
-            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-        }
     </style>
 </head>
 <body class="bg-neutral-950">
@@ -169,27 +166,7 @@
         <div class="container mx-auto px-6 py-4">
             <nav class="flex justify-between items-center">
                 <a href="#home" class="text-white">
-                    <svg class="w-auto h-12" viewBox="0 0 160 50" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#fbbf24"/>
-                                <stop offset="50%" stop-color="#f59e0b"/>
-                                <stop offset="100%" stop-color="#d97706"/>
-                            </linearGradient>
-                            <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#ffffff"/>
-                                <stop offset="100%" stop-color="#fbbf24"/>
-                            </linearGradient>
-                        </defs>
-                        <circle cx="25" cy="25" r="20" stroke="url(#logoGradient)" stroke-width="3" fill="none"/>
-                        <circle cx="25" cy="25" r="15" stroke="url(#logoGradient)" stroke-width="1.5" fill="rgba(251, 191, 36, 0.1)"/>
-                        <polygon points="25,8 26.5,12 31,12 27.5,15 29,19 25,16 21,19 22.5,15 19,12 23.5,12" fill="url(#logoGradient)"/>
-                        <polygon points="25,31 26.5,35 31,35 27.5,38 29,42 25,39 21,42 22.5,38 19,35 23.5,35" fill="url(#logoGradient)"/>
-                        <text x="25" y="32" font-family="'Poppins', sans-serif" font-size="20" font-weight="900" fill="url(#textGradient)" text-anchor="middle">B</text>
-                        <text x="55" y="20" font-family="'Poppins', sans-serif" font-size="16" font-weight="800" fill="url(#textGradient)">BANDHAN</text>
-                        <text x="55" y="35" font-family="'Poppins', sans-serif" font-size="12" font-weight="600" fill="#fbbf24">2K25</text>
-                        <line x1="55" y1="38" x2="125" y2="38" stroke="url(#logoGradient)" stroke-width="2"/>
-                    </svg>
+                    <img src="/images/logo.png" alt="Aikya 2K25 Logo" class="w-auto h-14">
                 </a>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#home" class="nav-link active relative">Home</a>
@@ -197,12 +174,6 @@
                     <a href="#notices" class="nav-link relative">Notices</a>
                     <a href="#gallery" class="nav-link relative">Gallery</a>
                     <a href="#contact" class="nav-link relative">Contact</a>
-                </div>
-
-                <div class="relative hidden md:inline-block">
-                    <button id="desktop-register-toggle" class="btn-primary text-black font-bold py-2 px-6 rounded-lg">Register</button>
-                    <div id="desktop-register-dropdown" class="dropdown-menu absolute right-0 mt-2 w-48 bg-neutral-800 rounded-lg shadow-lg py-2 z-20 invisible opacity-0 transform scale-95 origin-top-right">
-                        </div>
                 </div>
 
                 <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
@@ -216,13 +187,6 @@
             <a href="#notices" class="block text-center py-2 px-4 text-sm nav-link">Notices</a>
             <a href="#gallery" class="block text-center py-2 px-4 text-sm nav-link">Gallery</a>
             <a href="#contact" class="block text-center py-2 px-4 text-sm nav-link">Contact</a>
-            <div class="py-4 text-center">
-                 <div class="relative inline-block">
-                    <button id="mobile-register-toggle" class="btn-primary text-black font-bold py-2 px-6 rounded-lg">Register</button>
-                    <div id="mobile-register-dropdown" class="dropdown-menu absolute right-0 mt-2 w-48 bg-neutral-800 rounded-lg shadow-lg py-2 z-20 invisible opacity-0 transform scale-95 origin-top-right">
-                        </div>
-                </div>
-            </div>
         </div>
     </header>
 
@@ -230,7 +194,7 @@
         <section id="home" class="relative min-h-screen hero-bg flex flex-col justify-center items-center text-center px-4 overflow-hidden">
             <div class="hero-content">
                 <h1 class="font-poppins text-lg md:text-xl lg:text-2xl font-extrabold text-white leading-tight mb-4 hero-glow">
-                    Bandhan - <span class="text-amber-400">2K25</span>
+                    Aikya - <span class="text-amber-400">2K25</span>
                 </h1>
                 <p class="text-xs md:text-sm text-neutral-300 max-w-3xl mx-auto mb-8">
                     A celebration of unity, talent, and unforgettable moments. Get ready for a day packed with excitement and joy!
@@ -269,29 +233,29 @@
                 <div class="mb-16 animated">
                     <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Non-Technical Events</h3>
                     <div id="non-technical-events-container" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                         </div>
+                          </div>
                 </div>
                 
                 <div class="mb-16 animated">
-                     <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Sports & Games</h3>
-                     
-                     <div class="mb-12">
-                         <h4 class="font-poppins text-xs md:text-sm font-semibold text-neutral-300 mb-6 text-center">Outdoor Sports</h4>
-                         <div id="outdoor-sports-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-                             </div>
-                     </div>
-                     
-                     <div>
-                         <h4 class="font-poppins text-xs md:text-sm font-semibold text-neutral-300 mb-6 text-center">Indoor Games</h4>
-                         <div id="indoor-sports-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-                             </div>
-                     </div>
+                       <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Sports & Games</h3>
+                       
+                       <div class="mb-12">
+                             <h4 class="font-poppins text-xs md:text-sm font-semibold text-neutral-300 mb-6 text-center">Outdoor Sports</h4>
+                             <div id="outdoor-sports-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+                                   </div>
+                       </div>
+                       
+                       <div>
+                             <h4 class="font-poppins text-xs md:text-sm font-semibold text-neutral-300 mb-6 text-center">Indoor Games</h4>
+                             <div id="indoor-sports-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+                                   </div>
+                       </div>
                 </div>
 
                 <div class="animated">
-                     <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Spot Events</h3>
-                     <div id="spot-events-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                         </div>
+                       <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Spot Events</h3>
+                       <div id="spot-events-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                             </div>
                 </div>
             </div>
         </section>
@@ -324,38 +288,38 @@
             <div class="container mx-auto px-6">
                 <h2 class="section-title font-poppins text-base md:text-lg font-bold text-center mb-12 animated">Glimpses from the Past</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                     <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
-                        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&h=600&fit=crop" alt="Cultural dance performance" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
-                        <div class="absolute bottom-4 left-4 text-white">
-                            <h4 class="font-bold text-sm">Cultural Night</h4>
-                            <p class="text-xs opacity-80">Dance & Music</p>
+                       <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
+                            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&h=600&fit=crop" alt="Cultural dance performance" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h4 class="font-bold text-sm">Cultural Night</h4>
+                                <p class="text-xs opacity-80">Dance & Music</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
-                        <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600&h=600&fit=crop" alt="Sports competition" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
-                        <div class="absolute bottom-4 left-4 text-white">
-                            <h4 class="font-bold text-sm">Sports Arena</h4>
-                            <p class="text-xs opacity-80">Competition Day</p>
+                        <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
+                            <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600&h=600&fit=crop" alt="Sports competition" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h4 class="font-bold text-sm">Sports Arena</h4>
+                                <p class="text-xs opacity-80">Competition Day</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
-                        <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=600&h=600&fit=crop" alt="Technical showcase" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
-                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
-                         <div class="absolute bottom-4 left-4 text-white">
-                            <h4 class="font-bold text-sm">Tech Expo</h4>
-                            <p class="text-xs opacity-80">Innovation Hub</p>
+                        <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
+                            <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=600&h=600&fit=crop" alt="Technical showcase" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
+                              <div class="absolute bottom-4 left-4 text-white">
+                                <h4 class="font-bold text-sm">Tech Expo</h4>
+                                <p class="text-xs opacity-80">Innovation Hub</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
-                        <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&h=600&fit=crop" alt="Award ceremony" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
-                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
-                         <div class="absolute bottom-4 left-4 text-white">
-                            <h4 class="font-bold text-sm">Victory Moments</h4>
-                            <p class="text-xs opacity-80">Award Ceremony</p>
+                        <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
+                            <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&h=600&fit=crop" alt="Award ceremony" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
+                              <div class="absolute bottom-4 left-4 text-white">
+                                <h4 class="font-bold text-sm">Victory Moments</h4>
+                                <p class="text-xs opacity-80">Award Ceremony</p>
+                            </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -364,66 +328,66 @@
             <div class="container mx-auto px-6">
                 <h2 class="section-title font-poppins text-base md:text-lg font-bold text-center mb-12 animated">Event Coordinators</h2>
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                     <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
-                         <div class="flex items-center mb-4">
-                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
-                                <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Technical Events</h3>
-                         </div>
-                         <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to technical events like Hackathon, AlgoWars, etc.</p>
-                         <div class="border-t border-neutral-600 pt-4">
-                            <p class="font-bold text-xs md:text-sm text-white">R. Prasanna Kumar</p>
-                            <a href="tel:9392693465" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 9392693465</a>
-                         </div>
-                     </div>
-                     <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
-                         <div class="flex items-center mb-4">
-                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
-                                <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Non-Technical Events</h3>
-                         </div>
-                         <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Essay Writing, GD, Project Presentation, etc.</p>
-                         <div class="border-t border-neutral-600 pt-4">
-                            <p class="font-bold text-xs md:text-sm text-white">D. Varun</p>
-                            <a href="tel:8309352741" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 8309352741</a>
-                         </div>
-                     </div>
-                     <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
-                         <div class="flex items-center mb-4">
-                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
-                                <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Sports Events</h3>
-                         </div>
-                         <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Cricket, Basketball, Indoor games, etc.</p>
-                         <div class="border-t border-neutral-600 pt-4">
-                            <p class="font-bold text-xs md:text-sm text-white">P. Kalyan Kumar</p>
-                            <a href="tel:6300808054" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 6300808054</a>
-                         </div>
-                     </div>
-                     <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
-                         <div class="flex items-center mb-4">
-                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
-                                <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Spot Events</h3>
-                         </div>
-                         <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Housie, Treasure Hunt, E-Sports, etc.</p>
-                         <div class="border-t border-neutral-600 pt-4">
-                            <p class="font-bold text-xs md:text-sm text-white">K. Venkat Sai</p>
-                            <a href="tel:8142200325" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 8142200325</a>
-                         </div>
-                     </div>
+                       <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
+                             <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Technical Events</h3>
+                             </div>
+                             <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Hackathon, AlgoWars, etc.</p>
+                             <div class="border-t border-neutral-600 pt-4">
+                                <p class="font-bold text-xs md:text-sm text-white">R. Prasanna Kumar</p>
+                                <a href="tel:9392693465" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 9392693465</a>
+                             </div>
+                       </div>
+                       <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
+                             <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Non-Technical Events</h3>
+                             </div>
+                             <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Essay Writing, GD, Project Presentation, etc.</p>
+                             <div class="border-t border-neutral-600 pt-4">
+                                <p class="font-bold text-xs md:text-sm text-white">D. Varun</p>
+                                <a href="tel:8309352741" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 8309352741</a>
+                             </div>
+                       </div>
+                       <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
+                             <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Sports Events</h3>
+                             </div>
+                             <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Cricket, Basketball, Indoor games, etc.</p>
+                             <div class="border-t border-neutral-600 pt-4">
+                                <p class="font-bold text-xs md:text-sm text-white">P. Kalyan Kumar</p>
+                                <a href="tel:6300808054" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 6300808054</a>
+                             </div>
+                       </div>
+                       <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
+                             <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Spot Events</h3>
+                             </div>
+                             <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Housie, Treasure Hunt, E-Sports, etc.</p>
+                             <div class="border-t border-neutral-600 pt-4">
+                                <p class="font-bold text-xs md:text-sm text-white">K. Venkat Sai</p>
+                                <a href="tel:8142200325" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 8142200325</a>
+                             </div>
+                       </div>
                 </div>
             </div>
         </section>
@@ -432,7 +396,7 @@
 
     <footer class="bg-black py-10">
         <div class="container mx-auto px-6 text-center text-neutral-400">
-            <p>&copy; 2025 Bandhan Committee. All Rights Reserved.</p>
+            <p>&copy; 2025 Aikya Committee. All Rights Reserved.</p>
             <p class="text-sm mt-2">Designed with ❤️ for our hostel family.</p>
         </div>
     </footer>
@@ -693,26 +657,6 @@
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_FUN_AND_GAMES"
             }
         ];
-        const creativeEvents = [
-            { 
-                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.26a4 4 0 11-5.656 5.656L10.97 14.97a6 6 0 01-8.485-8.485L5.432 4.232a4 4 0 015.657-5.657zM15 11.5l2 2-2 2m-3-4l-2 2-2 2m-3-4l2-2" /></svg>`,
-                title: "Art & Craft",
-                summary: "A chance to showcase your artistic talent with on-the-spot drawing, painting, and craft-making challenges.",
-                description: "Express your creativity through various artistic mediums. Materials will be provided.",
-                rules: ["Individual participation", "Time limit: 1 hour", "Theme announced on the spot"],
-                judging: ["Creativity", "Originality", "Execution", "Adherence to Theme"],
-                formLink: "YOUR_GOOGLE_FORM_URL_FOR_ART_CRAFT"
-            }
-        ];
-
-        // Combine all events into a hierarchical structure for the dropdown
-        const eventCategories = {
-            'Tech Events': technicalEvents,
-            'Non-Tech Events': nonTechnicalEvents,
-            'Sports': [...outdoorSports, ...indoorSports],
-            'Spot Events': spotEvents,
-            'Creative Events': creativeEvents
-        };
 
         // --- Countdown Timer ---
         const countdownDate = new Date("2025-10-11T10:00:00").getTime();
@@ -753,84 +697,6 @@
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
-
-        // --- Registration Dropdown Logic ---
-        function closeAllDropdowns() {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                menu.classList.remove('visible', 'opacity-100', 'scale-100');
-                menu.classList.add('invisible', 'opacity-0', 'scale-95');
-            });
-        }
-
-        function populateDropdownWithEvents(dropdownMenu, events) {
-            let htmlContent = '<a href="#" class="block px-4 py-2 text-xs text-neutral-400 hover:text-white" onclick="showCategories(\'' + dropdownMenu.id + '\')">Back to Categories</a>';
-            htmlContent += events.map(event => `
-                <a href="${event.formLink}" target="_blank" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-amber-400">
-                    ${event.title || event.name}
-                </a>
-            `).join('');
-            dropdownMenu.innerHTML = htmlContent;
-        }
-
-        function populateDropdownWithCategories(dropdownMenu, categories) {
-            const htmlContent = Object.keys(categories).map(categoryName => `
-                <a href="#" class="category-link block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-amber-400" data-category="${categoryName}">
-                    ${categoryName}
-                </a>
-            `).join('');
-            dropdownMenu.innerHTML = htmlContent;
-
-            // Add click listeners to category links
-            dropdownMenu.querySelectorAll('.category-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const category = e.target.getAttribute('data-category');
-                    populateDropdownWithEvents(dropdownMenu, eventCategories[category]);
-                });
-            });
-        }
-        
-        // Global function to be called from the "Back" link
-        window.showCategories = (dropdownId) => {
-            const dropdownMenu = document.getElementById(dropdownId);
-            if (dropdownMenu) {
-                populateDropdownWithCategories(dropdownMenu, eventCategories);
-            }
-        };
-
-        function setupDropdown(toggleBtnId, dropdownMenuId) {
-            const toggleBtn = document.getElementById(toggleBtnId);
-            const dropdownMenu = document.getElementById(dropdownMenuId);
-
-            if (!toggleBtn || !dropdownMenu) return;
-
-            // Initial population of the dropdown with categories
-            populateDropdownWithCategories(dropdownMenu, eventCategories);
-
-            toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isVisible = dropdownMenu.classList.contains('visible');
-                closeAllDropdowns();
-                if (!isVisible) {
-                    dropdownMenu.classList.remove('invisible', 'opacity-0', 'scale-95');
-                    dropdownMenu.classList.add('visible', 'opacity-100', 'scale-100');
-                    // Ensure it's populated with categories every time it opens
-                    populateDropdownWithCategories(dropdownMenu, eventCategories);
-                }
-            });
-        }
-        
-        setupDropdown('desktop-register-toggle', 'desktop-register-dropdown');
-        setupDropdown('mobile-register-toggle', 'mobile-register-dropdown');
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.dropdown-menu') && !e.target.closest('button')) {
-                closeAllDropdowns();
-            }
-        });
-
 
         // --- Active Nav Link on Scroll ---
         const sections = document.querySelectorAll('main section');
@@ -923,6 +789,7 @@
         function openModal(event) {
             modalTitle.textContent = event.title || event.name;
             let bodyHTML = '';
+            
             if (event.description) {
                 bodyHTML += `<p class="mb-4 text-sm">${event.description}</p>`;
             }
@@ -933,11 +800,35 @@
                             </div>`;
             }
             if (event.judging && event.judging.length > 0) {
-                bodyHTML += `<div>
-                                <h4 class="font-poppins text-base font-bold text-white mt-4 mb-2">Judging Criteria</h4>
+                bodyHTML += `<div class="mt-4">
+                                <h4 class="font-poppins text-base font-bold text-white mb-2">Judging Criteria</h4>
                                 <ul class="modal-list list-inside space-y-1 text-sm">${event.judging.map(item => `<li>${item}</li>`).join('')}</ul>
                             </div>`;
             }
+
+            // --- Registration Button Logic ---
+            let registrationButtonHTML = '';
+            // Check specifically for AlgoWars and if a valid form link exists
+            if (event.title === 'AlgoWars' && event.formLink && event.formLink.startsWith('http')) {
+                registrationButtonHTML = `
+                    <div class="mt-6 text-center border-t border-neutral-700 pt-4">
+                        <a href="${event.formLink}" target="_blank" rel="noopener noreferrer" class="btn-primary inline-block text-black font-bold py-2 px-8 rounded-lg transition-transform duration-300 hover:scale-105">
+                            Register Now
+                        </a>
+                    </div>
+                `;
+            } else {
+                registrationButtonHTML = `
+                    <div class="mt-6 text-center border-t border-neutral-700 pt-4">
+                        <button disabled class="bg-neutral-800 text-neutral-500 font-bold py-2 px-8 rounded-lg cursor-not-allowed">
+                            Registration Coming Soon
+                        </button>
+                    </div>
+                `;
+            }
+            bodyHTML += registrationButtonHTML;
+            // --- End of Button Logic ---
+
             modalBody.innerHTML = bodyHTML;
             
             document.body.style.overflow = 'hidden';
