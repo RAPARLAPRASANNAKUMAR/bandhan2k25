@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aikya - 2K25</title>
+    <link rel="icon" href="/images/favicon.ico" sizes="any">
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -526,7 +530,7 @@
             { 
                 title: "Basketball", 
                 name: "Basketball", 
-                img: "/images/Basket ball.png", 
+                img: "/images/Basket-ball.png", 
                 description: "A fast-paced team sport where two teams try to score by shooting a ball through the opposing team's hoop.",
                 rules: ["Team Size: 5 players + 2 substitutes", "Half-court or Full-court format", "Match: 2 halves of 10 mins each", "Standard basketball rules apply"],
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_BASKETBALL"
@@ -534,7 +538,7 @@
             { 
                 title: "Volleyball", 
                 name: "Volleyball", 
-                img: "/images/Volley ball.png", 
+                img: "/images/Volley-ball.png", 
                 description: "A team sport where two teams are separated by a net and try to score points by grounding the ball on the opponent's court.",
                 rules: ["Team Size: 6 players + 2 substitutes", "Best of 3 sets (25 points)", "Knockout format", "Standard volleyball rules"],
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_VOLLEYBALL"
@@ -558,7 +562,7 @@
             { 
                 title: "Kho-Kho", 
                 name: "Kho-Kho", 
-                img: "/images/kho kho.png", 
+                img: "/images/kho-kho.png", 
                 description: "A traditional Indian sport played between two teams, involving chasing and dodging.",
                 rules: ["Team Size: 9 players", "Knockout matches", "Standard Kho-Kho rules", "Referee's decision is final"],
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_KHO_KHO"
@@ -574,7 +578,7 @@
             { 
                 title: "Tug of War", 
                 name: "Tug of War", 
-                img: "/images/Tug of war.png", 
+                img: "/images/Tug-of-war.png", 
                 description: "A team sport where two teams pull on opposite ends of a rope.",
                 rules: ["Team Size: 8 players", "Knockout matches", "Best of 3 pulls"],
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_TUG_OF_WAR"
@@ -585,7 +589,7 @@
             { 
                 title: "Table Tennis", 
                 name: "Table Tennis", 
-                img: "/images/Table tennis.png", 
+                img: "/images/Table-tennis.png", 
                 description: "A fast-paced indoor sport played with paddles and a lightweight ball.",
                 rules: ["Format: Singles & Doubles", "Best of 3 games (11 points each)", "Standard ITTF rules apply"],
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_TABLE_TENNIS"
@@ -609,7 +613,7 @@
             { 
                 title: "Powerlifting", 
                 name: "Powerlifting", 
-                img: "/images/Power lifting.png", 
+                img: "/images/Power-lifting.png", 
                 description: "A strength sport consisting of three attempts at maximal weight on bench press, deadlift, and squat.",
                 rules: ["Format: Weight categories", "Bench press / Deadlift format", "Each participant gets 3 attempts", "Best valid lift considered"],
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_POWERLIFTING"
@@ -617,7 +621,7 @@
             { 
                 title: "Push-Ups Challenge", 
                 name: "Push-Ups Challenge", 
-                img: "/images/Push up.png", 
+                img: "/images/Push-up.png", 
                 description: "A fitness challenge to test upper body strength and endurance.",
                 rules: ["Individual Event", "Maximum push-ups in 1 minute", "Proper form must be maintained"],
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_PUSH_UPS"
@@ -701,7 +705,7 @@
         // --- Active Nav Link on Scroll ---
         const sections = document.querySelectorAll('main section');
         const navLinks = document.querySelectorAll('.nav-link');
-        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.2 }; // Threshold lowered to fix long section issue
         const sectionObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
