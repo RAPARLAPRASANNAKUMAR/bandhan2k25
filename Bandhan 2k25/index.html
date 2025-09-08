@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandhan - 2K25</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --amber-gradient: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+            overflow-x: hidden;
+        }
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(20, 20, 20, 0.8)), 
+                        url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1920&h=1080&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f59e0b;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .event-card-main, .notice-card, .coordinator-card {
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .event-card-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .event-card-main:hover::before {
+            left: 100%;
+        }
+        .event-card-main:hover, .notice-card:hover, .coordinator-card:hover {
+            transform: translateY(-8px);
+            border-color: #f59e0b;
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: #f59e0b;
+            margin-top: 8px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 2px;
+        }
+        .hero-glow {
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.4), 0 0 30px rgba(245, 158, 11, 0.2);
+        }
+        .btn-primary {
+            background: var(--amber-gradient);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+        #home::before {
+            content: 'Bandhan-2K25';
+            font-family: 'Anton', sans-serif;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(3.5rem, 18vw, 15rem);
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+            pointer-events: none;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Modal Styles */
+        #event-modal {
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-list li {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        .modal-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+        }
+        .animated {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .animated.hidden {
+            opacity: 0;
+            transform: translateY(2rem);
+        }
+        .animated.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .dropdown-menu {
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-neutral-950">
+
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4">
+            <nav class="flex justify-between items-center">
+                <a href="#home" class="text-white">
+                    <svg class="w-auto h-12" viewBox="0 0 160 50" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#fbbf24"/>
+                                <stop offset="50%" stop-color="#f59e0b"/>
+                                <stop offset="100%" stop-color="#d97706"/>
+                            </linearGradient>
+                            <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#fbbf24"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="25" cy="25" r="20" stroke="url(#logoGradient)" stroke-width="3" fill="none"/>
+                        <circle cx="25" cy="25" r="15" stroke="url(#logoGradient)" stroke-width="1.5" fill="rgba(251, 191, 36, 0.1)"/>
+                        <polygon points="25,8 26.5,12 31,12 27.5,15 29,19 25,16 21,19 22.5,15 19,12 23.5,12" fill="url(#logoGradient)"/>
+                        <polygon points="25,31 26.5,35 31,35 27.5,38 29,42 25,39 21,42 22.5,38 19,35 23.5,35" fill="url(#logoGradient)"/>
+                        <text x="25" y="32" font-family="'Poppins', sans-serif" font-size="20" font-weight="900" fill="url(#textGradient)" text-anchor="middle">B</text>
+                        <text x="55" y="20" font-family="'Poppins', sans-serif" font-size="16" font-weight="800" fill="url(#textGradient)">BANDHAN</text>
+                        <text x="55" y="35" font-family="'Poppins', sans-serif" font-size="12" font-weight="600" fill="#fbbf24">2K25</text>
+                        <line x1="55" y1="38" x2="125" y2="38" stroke="url(#logoGradient)" stroke-width="2"/>
+                    </svg>
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link active relative">Home</a>
+                    <a href="#events" class="nav-link relative">Events</a>
+                    <a href="#notices" class="nav-link relative">Notices</a>
+                    <a href="#gallery" class="nav-link relative">Gallery</a>
+                    <a href="#contact" class="nav-link relative">Contact</a>
+                </div>
+
+                <div class="relative hidden md:inline-block">
+                    <button id="desktop-register-toggle" class="btn-primary text-black font-bold py-2 px-6 rounded-lg">Register</button>
+                    <div id="desktop-register-dropdown" class="dropdown-menu absolute right-0 mt-2 w-48 bg-neutral-800 rounded-lg shadow-lg py-2 z-20 invisible opacity-0 transform scale-95 origin-top-right">
+                        </div>
+                </div>
+
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </nav>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-black bg-opacity-90">
+            <a href="#home" class="block text-center py-2 px-4 text-sm nav-link">Home</a>
+            <a href="#events" class="block text-center py-2 px-4 text-sm nav-link">Events</a>
+            <a href="#notices" class="block text-center py-2 px-4 text-sm nav-link">Notices</a>
+            <a href="#gallery" class="block text-center py-2 px-4 text-sm nav-link">Gallery</a>
+            <a href="#contact" class="block text-center py-2 px-4 text-sm nav-link">Contact</a>
+            <div class="py-4 text-center">
+                 <div class="relative inline-block">
+                    <button id="mobile-register-toggle" class="btn-primary text-black font-bold py-2 px-6 rounded-lg">Register</button>
+                    <div id="mobile-register-dropdown" class="dropdown-menu absolute right-0 mt-2 w-48 bg-neutral-800 rounded-lg shadow-lg py-2 z-20 invisible opacity-0 transform scale-95 origin-top-right">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="relative min-h-screen hero-bg flex flex-col justify-center items-center text-center px-4 overflow-hidden">
+            <div class="hero-content">
+                <h1 class="font-poppins text-lg md:text-xl lg:text-2xl font-extrabold text-white leading-tight mb-4 hero-glow">
+                    Bandhan - <span class="text-amber-400">2K25</span>
+                </h1>
+                <p class="text-xs md:text-sm text-neutral-300 max-w-3xl mx-auto mb-8">
+                    A celebration of unity, talent, and unforgettable moments. Get ready for a day packed with excitement and joy!
+                </p>
+                <div id="countdown" class="grid grid-cols-4 gap-4 md:gap-8 max-w-2xl mx-auto text-white">
+                    <div class="countdown-box p-2 md:p-3 rounded-lg">
+                        <span id="days" class="font-poppins text-base md:text-lg font-bold">00</span>
+                        <span class="block text-xs text-neutral-300">Days</span>
+                    </div>
+                    <div class="countdown-box p-2 md:p-3 rounded-lg">
+                        <span id="hours" class="font-poppins text-base md:text-lg font-bold">00</span>
+                        <span class="block text-xs text-neutral-300">Hours</span>
+                    </div>
+                    <div class="countdown-box p-2 md:p-3 rounded-lg">
+                        <span id="minutes" class="font-poppins text-base md:text-lg font-bold">00</span>
+                        <span class="block text-xs text-neutral-300">Minutes</span>
+                    </div>
+                    <div class="countdown-box p-2 md:p-3 rounded-lg">
+                        <span id="seconds" class="font-poppins text-base md:text-lg font-bold">00</span>
+                        <span class="block text-xs text-neutral-300">Seconds</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="events" class="py-20 md:py-28">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title font-poppins text-base md:text-lg font-bold text-center mb-16 animated">Our Events</h2>
+                
+                <div class="mb-16 animated">
+                    <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Technical Events</h3>
+                    <div id="technical-events-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        </div>
+                </div>
+
+                <div class="mb-16 animated">
+                    <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Non-Technical Events</h3>
+                    <div id="non-technical-events-container" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                         </div>
+                </div>
+                
+                <div class="mb-16 animated">
+                     <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Sports & Games</h3>
+                     
+                     <div class="mb-12">
+                         <h4 class="font-poppins text-xs md:text-sm font-semibold text-neutral-300 mb-6 text-center">Outdoor Sports</h4>
+                         <div id="outdoor-sports-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+                             </div>
+                     </div>
+                     
+                     <div>
+                         <h4 class="font-poppins text-xs md:text-sm font-semibold text-neutral-300 mb-6 text-center">Indoor Games</h4>
+                         <div id="indoor-sports-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+                             </div>
+                     </div>
+                </div>
+
+                <div class="animated">
+                     <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Spot Events</h3>
+                     <div id="spot-events-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                         </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="notices" class="py-20 md:py-28 bg-neutral-900">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title font-poppins text-base md:text-lg font-bold text-center mb-12 animated">General Guidelines</h2>
+                <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <div class="notice-card bg-black bg-opacity-20 p-6 rounded-lg border border-neutral-700 animated">
+                        <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-2">Reporting & Punctuality</h3>
+                        <p class="text-neutral-300 text-xs md:text-sm">All teams and individual participants must report to the event venue at least <strong>15 minutes before</strong> the scheduled start time. Punctuality is crucial, and late entries may face disqualification.</p>
+                    </div>
+                    <div class="notice-card bg-black bg-opacity-20 p-6 rounded-lg border border-neutral-700 animated">
+                        <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-2">Participation & Preparation</h3>
+                        <p class="text-neutral-300 text-xs md:text-sm">Students are welcome to participate in multiple events, schedule permitting. For sports events, participants should carry their own kits and equipment where required.</p>
+                    </div>
+                    <div class="notice-card bg-black bg-opacity-20 p-6 rounded-lg border border-neutral-700 animated">
+                        <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-2">Fair Play & Conduct</h3>
+                        <p class="text-neutral-300 text-xs md:text-sm">A spirit of healthy competition is expected. Any misconduct, violation of rules, or use of unfair means will lead to immediate disqualification. The decision of the judges, referees, and organizers is <strong>final and binding</strong>.</p>
+                    </div>
+                    <div class="notice-card bg-black bg-opacity-20 p-6 rounded-lg border border-neutral-700 animated">
+                        <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-2">Awards & Recognition</h3>
+                        <p class="text-neutral-300 text-xs md:text-sm">To celebrate talent and effort, certificates will be awarded to all participants. Winners of the events will be honored with special awards and exciting prizes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="py-20 md:py-28">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title font-poppins text-base md:text-lg font-bold text-center mb-12 animated">Glimpses from the Past</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                     <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
+                        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&h=600&fit=crop" alt="Cultural dance performance" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <h4 class="font-bold text-sm">Cultural Night</h4>
+                            <p class="text-xs opacity-80">Dance & Music</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
+                        <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600&h=600&fit=crop" alt="Sports competition" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <h4 class="font-bold text-sm">Sports Arena</h4>
+                            <p class="text-xs opacity-80">Competition Day</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
+                        <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=600&h=600&fit=crop" alt="Technical showcase" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
+                         <div class="absolute bottom-4 left-4 text-white">
+                            <h4 class="font-bold text-sm">Tech Expo</h4>
+                            <p class="text-xs opacity-80">Innovation Hub</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item group overflow-hidden rounded-xl relative animated transform hover:scale-105 transition-all duration-500 border-2 border-transparent hover:border-amber-500">
+                        <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&h=600&fit=crop" alt="Award ceremony" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-110 transition-transform duration-500">
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-amber-900/60 transition-all duration-500"></div>
+                         <div class="absolute bottom-4 left-4 text-white">
+                            <h4 class="font-bold text-sm">Victory Moments</h4>
+                            <p class="text-xs opacity-80">Award Ceremony</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact" class="py-20 md:py-28 bg-neutral-900">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title font-poppins text-base md:text-lg font-bold text-center mb-12 animated">Event Coordinators</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                     <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
+                         <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
+                                <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Technical Events</h3>
+                         </div>
+                         <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to technical events like Hackathon, AlgoWars, etc.</p>
+                         <div class="border-t border-neutral-600 pt-4">
+                            <p class="font-bold text-xs md:text-sm text-white">R. Prasanna Kumar</p>
+                            <a href="tel:9392693465" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 9392693465</a>
+                         </div>
+                     </div>
+                     <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
+                         <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
+                                <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Non-Technical Events</h3>
+                         </div>
+                         <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Essay Writing, GD, Project Presentation, etc.</p>
+                         <div class="border-t border-neutral-600 pt-4">
+                            <p class="font-bold text-xs md:text-sm text-white">D. Varun</p>
+                            <a href="tel:8309352741" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 8309352741</a>
+                         </div>
+                     </div>
+                     <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
+                         <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
+                                <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Sports Events</h3>
+                         </div>
+                         <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Cricket, Basketball, Indoor games, etc.</p>
+                         <div class="border-t border-neutral-600 pt-4">
+                            <p class="font-bold text-xs md:text-sm text-white">P. Kalyan Kumar</p>
+                            <a href="tel:6300808054" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 6300808054</a>
+                         </div>
+                     </div>
+                     <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
+                         <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
+                                <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Spot Events</h3>
+                         </div>
+                         <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Housie, Treasure Hunt, E-Sports, etc.</p>
+                         <div class="border-t border-neutral-600 pt-4">
+                            <p class="font-bold text-xs md:text-sm text-white">K. Venkat Sai</p>
+                            <a href="tel:8142200325" class="text-amber-400 hover:text-amber-300 text-xs md:text-sm transition-colors">📞 8142200325</a>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black py-10">
+        <div class="container mx-auto px-6 text-center text-neutral-400">
+            <p>&copy; 2025 Bandhan Committee. All Rights Reserved.</p>
+            <p class="text-sm mt-2">Designed with ❤️ for our hostel family.</p>
+        </div>
+    </footer>
+
+    <div id="event-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black bg-opacity-70 backdrop-blur-sm invisible opacity-0">
+        <div class="modal-content bg-neutral-900 border border-neutral-700 rounded-xl p-4 max-w-xl w-full max-h-[90vh] overflow-y-auto transform scale-95">
+            <div class="flex justify-between items-center mb-3">
+                <h3 id="modal-title" class="font-poppins text-lg font-bold text-amber-400">Event Title</h3>
+                <button id="modal-close" class="text-neutral-400 hover:text-white transition-colors text-2xl leading-none">&times;</button>
+            </div>
+            <div id="modal-body" class="text-neutral-300 space-y-3">
+                </div>
+        </div>
+    </div>
+
+
+    <script>
+    console.log('Script started loading...');
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM Content Loaded!');
+
+        // --- Data for Events ---
+        const technicalEvents = [
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>`,
+                title: "CodeSprint (Hackathon)",
+                summary: "A 6-hour hackathon to build innovative solutions for real-world problems. Team up and code your way to victory.",
+                description: "A 6-hour hackathon where students brainstorm, design, and implement innovative solutions to real-world problems.",
+                rules: ["Team Size: 2-4 members", "Open to all departments", "Problem statements announced at the beginning", "Use any language, tool, or framework.", "Duration: 5:00 PM - 11:00 PM"],
+                judging: ["Innovation & Creativity", "Feasibility of Solution", "Technical Implementation", "Presentation & Teamwork"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_CODESPRINT"
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8 4.03-8 9-8 9 3.582 9 8z" /></svg>`,
+                title: "Tech-Bytes",
+                summary: "Share your views on trending tech in a 2-3 minute talk. Win based on judges' and audience votes.",
+                description: "A platform for students to present and share their views on trending technologies or innovative ideas. Each participant will speak for 2-3 minutes on a given or chosen technical topic.",
+                rules: ["Individual participation", "Time limit: 2-3 minutes", "Topics can be given in advance or chosen with approval"],
+                judging: ["Content & Relevance", "Clarity of Speech & Confidence", "Creativity & Presentation", "Two awards: Judges' Choice & Popular Choice"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_TECH_BYTES"
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 14h.01M12 11h.01M12 8h.01M15 8h.01M9 8h.01M4 4h16v16H4V4z" /></svg>`,
+                title: "AlgoWars",
+                summary: "An individual coding competition to solve a series of algorithmic challenges against the clock. For C, C++, Java, Python lovers.",
+                description: "A programming contest where students solve problems ranging from beginner to advanced within the given time.",
+                rules: ["Individual participation", "Languages: C, C++, Java, Python", "Questions range from Easy to Hard"],
+                judging: ["Correctness", "Efficiency", "Time Taken"],
+                formLink: "https://forms.gle/aNYYykrNZ6huCsge6"
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3" /><circle cx="12" cy="12" r="4" /></svg>`,
+                title: "CircuitSim Challenge",
+                summary: "Design and test embedded circuits using simulation tools like Proteus or Multisim. For ECE/EEE students.",
+                description: "A simulation-based competition to design and test embedded circuits and microcontroller systems using software tools.",
+                rules: ["Team size: 2-3 members", "Open to ECE, EEE, and related branches", "Tools: Proteus, Multisim, Tinkercad, etc.", "Problem statement given on the spot"],
+                judging: ["Correctness of Simulation", "Innovation in Design", "Practical Applicability", "Presentation"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_CIRCUIT_SIM"
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12l-3-3m0 0l-3 3m3-3v12" /><path d="M12 21a9 9 0 100-18 9 9 0 000 18z" /></svg>`,
+                title: "DesignX (CAD Competition)",
+                summary: "Showcase your design skills using CAD software like AutoCAD or SolidWorks. A challenge for Mech & Civil engineers.",
+                description: "A design-based competition for Mechanical & Civil students to showcase their creativity using CAD software.",
+                rules: ["Individual participation", "Tools: AutoCAD, SolidWorks, CATIA, etc.", "Task will be given during the event"],
+                judging: ["Accuracy", "Creativity", "Detailing", "Innovation"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_DESIGNX"
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.24a2 2 0 00-1.806.547a2 2 0 00-.547 1.806l.477 2.387a6 6 0 00.517 3.86l.158.318a6 6 0 00.517 3.86l2.387.477a2 2 0 001.806-.547a2 2 0 00.547-1.806l-.477-2.387a6 6 0 00-.517-3.86l-.158-.318a6 6 0 00-.517-3.86l-2.387-.477a2 2 0 00-.547-1.022" transform="rotate(-45 12 12)" /><path d="M12 6V3M12 21v-3" /></svg>`,
+                title: "Brain-ace (Quiz)",
+                summary: "A technical quiz on electrical, electronic, and mechanical components. Team up and test your knowledge.",
+                description: "A technical quiz designed to test knowledge of electrical, electronic, and mechanical components.",
+                rules: ["Team size: 2 members", "Open to all departments", "Rounds: Identification, Application, Rapid Fire"],
+                judging: ["Scoring based on cumulative points across rounds"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_BRAIN_ACE"
+            }
+        ];
+        const nonTechnicalEvents = [
+             {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>`,
+                title: "Essay Writing",
+                summary: "Showcase your writing skills and creativity. A topic will be given on the spot to test your expressive ability.",
+                description: "A competition to evaluate the writing skills, creativity, and ability to express thoughts effectively on a given topic.",
+                rules: ["Individual participation", "Time limit: 45 minutes", "Topics provided on the spot", "Medium: English only"],
+                judging: ["Content", "Creativity", "Language", "Grammar", "Structure"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_ESSAY_WRITING"
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2V7a2 2 0 012-2h4m3 0a5 5 0 00-10 0v1" /></svg>`,
+                title: "GD / Elocution",
+                summary: "Test your communication, confidence, and leadership skills in dynamic group discussions or powerful solo speeches.",
+                description: "An event to test communication skills, confidence, and the ability to present and defend ideas effectively, either individually or in a group.",
+                rules: ["Participation: Individual (Elocution) or 6-10 members per group (GD)", "Elocution Time: 3-5 minutes per participant", "GD Time: 15-20 minutes per round", "Topics provided on the spot"],
+                judging: ["Content & Clarity", "Confidence", "Team Spirit", "Leadership Skills"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_GD_ELOCUTION"
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>`,
+                title: "Project Presentation",
+                summary: "A platform to showcase your innovative academic or personal projects. Explain your work and impress the judges.",
+                description: "A platform for students to showcase their academic or innovative projects with clear explanation and demonstration.",
+                rules: ["Team size: 1-3 members", "Any domain (technical or interdisciplinary)", "Time: 8-10 minutes (including Q&A)", "Must prepare slides/posters/models"],
+                judging: ["Innovation", "Practical Relevance", "Presentation", "Technical Knowledge"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_PROJECT_PRESENTATION"
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>`,
+                title: "Aptitude Test",
+                summary: "Sharpen your logical reasoning, quantitative, and verbal skills in a test designed to mirror placement exams.",
+                description: "An assessment designed to test logical reasoning, quantitative ability, and verbal skills similar to placement exams.",
+                rules: ["Individual participation", "Written/online MCQ test", "Time: 45-60 minutes"],
+                judging: ["Accuracy", "Time efficiency", "Sections: Quantitative, Logical, Verbal"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_APTITUDE_TEST"
+            }
+        ];
+        const outdoorSports = [
+            { 
+                title: "Cricket", 
+                name: "Cricket", 
+                img: "/images/Cricket.png", 
+                description: "A team sport played with bat and ball between two teams of eleven players each.",
+                rules: ["Team Size: 11 players + 3 substitutes", "Knockout format", "Standard cricket rules apply", "Umpire's decision is final"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_CRICKET"
+            },
+            { 
+                title: "Basketball", 
+                name: "Basketball", 
+                img: "/images/Basket ball.png", 
+                description: "A fast-paced team sport where two teams try to score by shooting a ball through the opposing team's hoop.",
+                rules: ["Team Size: 5 players + 2 substitutes", "Half-court or Full-court format", "Match: 2 halves of 10 mins each", "Standard basketball rules apply"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_BASKETBALL"
+            },
+            { 
+                title: "Volleyball", 
+                name: "Volleyball", 
+                img: "/images/Volley ball.png", 
+                description: "A team sport where two teams are separated by a net and try to score points by grounding the ball on the opponent's court.",
+                rules: ["Team Size: 6 players + 2 substitutes", "Best of 3 sets (25 points)", "Knockout format", "Standard volleyball rules"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_VOLLEYBALL"
+            },
+            { 
+                title: "Badminton", 
+                name: "Badminton", 
+                img: "/images/Badminton.png", 
+                description: "A racquet sport played with a shuttlecock across a net.",
+                rules: ["Team Event (Doubles)", "Team Size: 5 players", "Best of 3 sets (21 points)", "Standard BWF rules"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_BADMINTON"
+            },
+            { 
+                title: "Kabaddi", 
+                name: "Kabaddi", 
+                img: "/images/Kabaddi.png", 
+                description: "A traditional Indian contact sport that combines elements of wrestling and rugby.",
+                rules: ["Team Size: 7 players + 3 substitutes", "Knockout format", "Standard kabaddi rules", "Referee's decision is final"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_KABADDI"
+            },
+            { 
+                title: "Kho-Kho", 
+                name: "Kho-Kho", 
+                img: "/images/kho kho.png", 
+                description: "A traditional Indian sport played between two teams, involving chasing and dodging.",
+                rules: ["Team Size: 9 players", "Knockout matches", "Standard Kho-Kho rules", "Referee's decision is final"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_KHO_KHO"
+            },
+            { 
+                title: "Athletics", 
+                name: "Athletics", 
+                img: "/images/Running.png", 
+                description: "Track and field events including running, jumping, and throwing competitions.",
+                rules: ["Running (Relay - 100m, 200m, 400m): Heats followed by Finals", "Long Jump & High Jump: 3 attempts per participant", "Discus, Javelin, Shot Put: 3 attempts per participant"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_ATHLETICS"
+            },
+            { 
+                title: "Tug of War", 
+                name: "Tug of War", 
+                img: "/images/Tug of war.png", 
+                description: "A team sport where two teams pull on opposite ends of a rope.",
+                rules: ["Team Size: 8 players", "Knockout matches", "Best of 3 pulls"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_TUG_OF_WAR"
+            }
+        ];
+        
+        const indoorSports = [
+            { 
+                title: "Table Tennis", 
+                name: "Table Tennis", 
+                img: "/images/Table tennis.png", 
+                description: "A fast-paced indoor sport played with paddles and a lightweight ball.",
+                rules: ["Format: Singles & Doubles", "Best of 3 games (11 points each)", "Standard ITTF rules apply"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_TABLE_TENNIS"
+            },
+            { 
+                title: "Chess", 
+                name: "Chess", 
+                img: "/images/Chess.png", 
+                description: "A strategic board game played between two players on a checkered board.",
+                rules: ["Format: Knockout matches", "Standard FIDE rules", "Each player gets a time limit (Rapid format)"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_CHESS"
+            },
+            { 
+                title: "Carrom", 
+                name: "Carrom", 
+                img: "/images/Carrom.png", 
+                description: "A tabletop game where players use a striker to pocket coins into corner holes.",
+                rules: ["Format: Singles / Doubles", "Best of 3 boards", "Standard Carrom Federation rules"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_CARROM"
+            },
+            { 
+                title: "Powerlifting", 
+                name: "Powerlifting", 
+                img: "/images/Power lifting.png", 
+                description: "A strength sport consisting of three attempts at maximal weight on bench press, deadlift, and squat.",
+                rules: ["Format: Weight categories", "Bench press / Deadlift format", "Each participant gets 3 attempts", "Best valid lift considered"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_POWERLIFTING"
+            },
+            { 
+                title: "Push-Ups Challenge", 
+                name: "Push-Ups Challenge", 
+                img: "/images/Push up.png", 
+                description: "A fitness challenge to test upper body strength and endurance.",
+                rules: ["Individual Event", "Maximum push-ups in 1 minute", "Proper form must be maintained"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_PUSH_UPS"
+            }
+        ];
+        const spotEvents = [
+            { 
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>`,
+                title: "Housie (Tambola)",
+                summary: "A classic game of luck. Mark off numbers on your ticket as they are called out. Fun prizes for lines and full house!",
+                description: "A fun and interactive game of chance where players mark numbers on a ticket as they are randomly drawn.",
+                rules: ["Participation: Individual / Group", "Standard Housie tickets will be given", "Numbers will be announced randomly", "Prizes for Early 5, First Row, Full House, etc."],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_HOUSIE"
+            },
+            { 
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>`,
+                title: "Free Fire / PUBG",
+                summary: "Squad up and battle it out in your favorite mobile shooter. Last squad standing wins.",
+                description: "An e-sports competition for mobile gamers to showcase their skills in popular battle royale games.",
+                rules: ["Team Size: 4 members (Squad)", "Mobile version only", "No hacks/cheats allowed (strict disqualification)", "Free Fire: Winners decided by Booyah / highest kills", "PUBG: Points based on survival + kills"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_E-SPORTS"
+            },
+            { 
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L15 9l-6 3l6 3l-5.447 2.724A1 1 0 019 20z" /></svg>`,
+                title: "Treasure Hunt",
+                summary: "Follow cryptic clues hidden across the campus. The first team to solve the puzzle and find the treasure wins!",
+                description: "An adventurous team-based event where participants solve riddles and follow clues to find a hidden treasure.",
+                rules: ["Team Size: 3-4 members", "Clues will be hidden across the campus", "First team to find the treasure wins"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_TREASURE_HUNT"
+            },
+            { 
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+                title: "Fun & Games",
+                summary: "Engage in quick, fun challenges like Musical Chairs, Memory Games, and Puzzles. Quick wit wins!",
+                description: "A series of fun-filled mini-games to test memory, speed, and quick thinking.",
+                rules: ["Includes Musical Chairs, quick memory recall tasks, riddles, and puzzles", "Time-based scoring", "Accuracy + Speed will decide winners"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_FUN_AND_GAMES"
+            }
+        ];
+        const creativeEvents = [
+            { 
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.26a4 4 0 11-5.656 5.656L10.97 14.97a6 6 0 01-8.485-8.485L5.432 4.232a4 4 0 015.657-5.657zM15 11.5l2 2-2 2m-3-4l-2 2-2 2m-3-4l2-2" /></svg>`,
+                title: "Art & Craft",
+                summary: "A chance to showcase your artistic talent with on-the-spot drawing, painting, and craft-making challenges.",
+                description: "Express your creativity through various artistic mediums. Materials will be provided.",
+                rules: ["Individual participation", "Time limit: 1 hour", "Theme announced on the spot"],
+                judging: ["Creativity", "Originality", "Execution", "Adherence to Theme"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_ART_CRAFT"
+            }
+        ];
+
+        // Combine all events into a hierarchical structure for the dropdown
+        const eventCategories = {
+            'Tech Events': technicalEvents,
+            'Non-Tech Events': nonTechnicalEvents,
+            'Sports': [...outdoorSports, ...indoorSports],
+            'Spot Events': spotEvents,
+            'Creative Events': creativeEvents
+        };
+
+        // --- Countdown Timer ---
+        const countdownDate = new Date("2025-10-11T10:00:00").getTime();
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown').innerHTML = `<div class="col-span-4 text-2xl font-bold">The Event is LIVE!</div>`;
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }, 1000);
+
+        // --- Header Scroll Effect ---
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('bg-black', 'bg-opacity-80', 'backdrop-blur-sm', 'shadow-lg');
+            } else {
+                header.classList.remove('bg-black', 'bg-opacity-80', 'backdrop-blur-sm', 'shadow-lg');
+            }
+        });
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- Registration Dropdown Logic ---
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('visible', 'opacity-100', 'scale-100');
+                menu.classList.add('invisible', 'opacity-0', 'scale-95');
+            });
+        }
+
+        function populateDropdownWithEvents(dropdownMenu, events) {
+            let htmlContent = '<a href="#" class="block px-4 py-2 text-xs text-neutral-400 hover:text-white" onclick="showCategories(\'' + dropdownMenu.id + '\')">Back to Categories</a>';
+            htmlContent += events.map(event => `
+                <a href="${event.formLink}" target="_blank" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-amber-400">
+                    ${event.title || event.name}
+                </a>
+            `).join('');
+            dropdownMenu.innerHTML = htmlContent;
+        }
+
+        function populateDropdownWithCategories(dropdownMenu, categories) {
+            const htmlContent = Object.keys(categories).map(categoryName => `
+                <a href="#" class="category-link block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-amber-400" data-category="${categoryName}">
+                    ${categoryName}
+                </a>
+            `).join('');
+            dropdownMenu.innerHTML = htmlContent;
+
+            // Add click listeners to category links
+            dropdownMenu.querySelectorAll('.category-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const category = e.target.getAttribute('data-category');
+                    populateDropdownWithEvents(dropdownMenu, eventCategories[category]);
+                });
+            });
+        }
+        
+        // Global function to be called from the "Back" link
+        window.showCategories = (dropdownId) => {
+            const dropdownMenu = document.getElementById(dropdownId);
+            if (dropdownMenu) {
+                populateDropdownWithCategories(dropdownMenu, eventCategories);
+            }
+        };
+
+        function setupDropdown(toggleBtnId, dropdownMenuId) {
+            const toggleBtn = document.getElementById(toggleBtnId);
+            const dropdownMenu = document.getElementById(dropdownMenuId);
+
+            if (!toggleBtn || !dropdownMenu) return;
+
+            // Initial population of the dropdown with categories
+            populateDropdownWithCategories(dropdownMenu, eventCategories);
+
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isVisible = dropdownMenu.classList.contains('visible');
+                closeAllDropdowns();
+                if (!isVisible) {
+                    dropdownMenu.classList.remove('invisible', 'opacity-0', 'scale-95');
+                    dropdownMenu.classList.add('visible', 'opacity-100', 'scale-100');
+                    // Ensure it's populated with categories every time it opens
+                    populateDropdownWithCategories(dropdownMenu, eventCategories);
+                }
+            });
+        }
+        
+        setupDropdown('desktop-register-toggle', 'desktop-register-dropdown');
+        setupDropdown('mobile-register-toggle', 'mobile-register-dropdown');
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown-menu') && !e.target.closest('button')) {
+                closeAllDropdowns();
+            }
+        });
+
+
+        // --- Active Nav Link on Scroll ---
+        const sections = document.querySelectorAll('main section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+        sections.forEach(section => sectionObserver.observe(section));
+        
+        // --- Populate Event Cards ---
+        const createEventCard = (event) => {
+            const card = document.createElement('div');
+            card.className = "event-card-main bg-gradient-to-br from-neutral-900 to-neutral-800 p-4 md:p-5 rounded-xl border-2 border-neutral-700 hover:border-amber-500 cursor-pointer h-full flex flex-col text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20";
+            card.innerHTML = `
+                <div class="text-amber-400 mb-3 transform group-hover:scale-110 transition-transform duration-300">${event.icon}</div>
+                <h4 class="font-poppins text-sm md:text-base font-bold text-white mb-3 group-hover:text-amber-300 transition-colors duration-300">${event.title}</h4>
+                <p class="text-neutral-300 flex-grow text-xs md:text-sm leading-relaxed">${event.summary}</p>
+                <div class="mt-4 flex justify-center">
+                    <div class="w-8 h-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full"></div>
+                </div>
+            `;
+            card.addEventListener('click', () => openModal(event));
+            return card;
+        };
+
+        const createSportCard = (event) => {
+            const card = document.createElement('div');
+            card.className = "group overflow-hidden rounded-xl border-2 border-neutral-800 hover:border-amber-500 cursor-pointer relative event-card-main w-full h-full transition-all duration-300 transform hover:scale-105";
+            card.innerHTML = `
+                <div class="relative">
+                    <img src="${event.img}" alt="${event.name || event.title}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+                    <div class="absolute top-2 right-2">
+                        <div class="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center">
+                            <svg class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h4 class="absolute bottom-2 left-2 right-2 font-poppins text-xs md:text-sm font-bold text-white drop-shadow-lg">${event.name || event.title}</h4>
+                </div>
+            `;
+            card.addEventListener('click', () => openModal(event));
+            return card;
+        };
+        
+        const eventSectionsToPopulate = [
+            { id: 'technical-events-container', data: technicalEvents, cardFn: createEventCard },
+            { id: 'non-technical-events-container', data: nonTechnicalEvents, cardFn: createEventCard },
+            { id: 'outdoor-sports-container', data: outdoorSports, cardFn: createSportCard },
+            { id: 'indoor-sports-container', data: indoorSports, cardFn: createSportCard },
+            { id: 'spot-events-container', data: spotEvents, cardFn: createEventCard }
+        ];
+        
+        eventSectionsToPopulate.forEach(section => {
+            const container = document.getElementById(section.id);
+            if (container) {
+                container.innerHTML = '';
+                section.data.forEach(event => {
+                    try {
+                        const card = section.cardFn(event);
+                        container.appendChild(card);
+                    } catch (error) {
+                        console.error(`Error creating card for event:`, error, event);
+                    }
+                });
+            } else {
+                console.error(`Container with ID #${section.id} not found.`);
+            }
+        });
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('event-modal');
+        const modalContent = modal.querySelector('.modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+
+        function openModal(event) {
+            modalTitle.textContent = event.title || event.name;
+            let bodyHTML = '';
+            if (event.description) {
+                bodyHTML += `<p class="mb-4 text-sm">${event.description}</p>`;
+            }
+            if (event.rules && event.rules.length > 0) {
+                bodyHTML += `<div>
+                                <h4 class="font-poppins text-base font-bold text-white mb-2">Rules & Guidelines</h4>
+                                <ul class="modal-list list-inside space-y-1 text-sm">${event.rules.map(rule => `<li>${rule}</li>`).join('')}</ul>
+                            </div>`;
+            }
+            if (event.judging && event.judging.length > 0) {
+                bodyHTML += `<div>
+                                <h4 class="font-poppins text-base font-bold text-white mt-4 mb-2">Judging Criteria</h4>
+                                <ul class="modal-list list-inside space-y-1 text-sm">${event.judging.map(item => `<li>${item}</li>`).join('')}</ul>
+                            </div>`;
+            }
+            modalBody.innerHTML = bodyHTML;
+            
+            document.body.style.overflow = 'hidden';
+            modal.classList.remove('invisible', 'opacity-0');
+            setTimeout(() => modalContent.classList.remove('scale-95'), 10);
+        }
+
+        function closeModal() {
+            document.body.style.overflow = 'auto';
+            modalContent.classList.add('scale-95');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('invisible'), 300);
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") closeModal();
+        });
+
+        // --- Animate on Scroll ---
+        const animatedElements = document.querySelectorAll('.animated');
+        const animationObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    animationObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        animatedElements.forEach(el => animationObserver.observe(el));
+    });
+    </script>
+</body>
+</html>
