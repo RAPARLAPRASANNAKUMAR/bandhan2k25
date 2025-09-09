@@ -14,10 +14,148 @@
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --amber-gradient: linear-gradient(90deg, #f59e0b, #fbbf24);
+            --amber-gradient: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
         }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+        }
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #0c0a09 0%, #1c1917 50%, #0c0a09 100%);
+            position: relative;
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .countdown-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f59e0b;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .event-card-main, .notice-card, .coordinator-card {
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .event-card-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .event-card-main:hover::before {
+            left: 100%;
+        }
+        .event-card-main:hover, .notice-card:hover, .coordinator-card:hover {
+            transform: translateY(-8px);
+            border-color: #f59e0b;
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: #f59e0b;
+            margin-top: 8px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 2px;
+        }
+        .hero-glow {
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.4), 0 0 30px rgba(245, 158, 11, 0.2);
+        }
+        .btn-primary {
+            background: var(--amber-gradient);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+        #home::before {
+            content: 'Aikya-2K25';
+            font-family: 'Anton', sans-serif;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(3.5rem, 18vw, 15rem);
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+            pointer-events: none;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Modal Styles */
+        #event-modal {
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-list li {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        .modal-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+        }
+        .animated {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .animated.hidden {
+            opacity: 0;
+            transform: translateY(2rem);
+        }
+        .animated.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
             background-color: #0a0a0a;
             color: #e5e5e5;
             overflow-x: hidden;
@@ -256,7 +394,7 @@
                        </div>
                 </div>
 
-                <div class="animated">
+                <div class="mb-16 animated">
                        <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Spot Events</h3>
                        <div id="spot-events-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                              </div>
@@ -679,6 +817,7 @@
                 summary: "Engage in quick, fun challenges like Musical Chairs, Memory Games, and Puzzles. Quick wit wins!",
                 description: "A series of fun-filled mini-games to test memory, speed, and quick thinking.",
                 rules: ["Includes Musical Chairs, quick memory recall tasks, riddles, and puzzles", "Time-based scoring", "Accuracy + Speed will decide winners"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_FUN_AND_GAMES"
             }
         ];
         const creativeEvents = [
