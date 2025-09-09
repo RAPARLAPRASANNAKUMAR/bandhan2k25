@@ -155,6 +155,45 @@
             opacity: 1;
             transform: translateY(0);
         }
+        .toggle-container {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .toggle-container input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #f59e0b;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
     </style>
 </head>
 <body class="bg-neutral-950">
@@ -219,8 +258,17 @@
 
         <section id="events" class="py-20 md:py-28">
             <div class="container mx-auto px-6">
-                <h2 class="section-title font-poppins text-base md:text-lg font-bold text-center mb-16 animated">Our Events</h2>
-                
+                <div class="flex flex-col md:flex-row justify-center md:justify-between items-center mb-16 animated">
+                    <h2 class="section-title font-poppins text-base md:text-lg font-bold text-center mb-4 md:mb-0">Our Events</h2>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-neutral-400 text-sm">Show Available Only</span>
+                        <label class="toggle-container">
+                            <input type="checkbox" id="available-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
                 <div class="mb-16 animated">
                     <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400 mb-8 text-center">Technical Events</h3>
                     <div id="technical-events-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -333,11 +381,6 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
                        <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
                              <div class="flex items-center mb-4">
-                                <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
                                 <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Technical Events</h3>
                              </div>
                              <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Hackathon, AlgoWars, etc.</p>
@@ -348,11 +391,6 @@
                        </div>
                        <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
                              <div class="flex items-center mb-4">
-                                <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
                                 <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Non-Technical Events</h3>
                              </div>
                              <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Essay Writing, GD, Project Presentation, etc.</p>
@@ -363,11 +401,6 @@
                        </div>
                        <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
                              <div class="flex items-center mb-4">
-                                <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
                                 <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Sports Events</h3>
                              </div>
                              <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Cricket, Basketball, Indoor games, etc.</p>
@@ -378,11 +411,6 @@
                        </div>
                        <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
                              <div class="flex items-center mb-4">
-                                <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
                                 <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Spot Events</h3>
                              </div>
                              <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Housie, Treasure Hunt, E-Sports, etc.</p>
@@ -393,11 +421,6 @@
                        </div>
                        <div class="coordinator-card bg-gradient-to-br from-black/40 to-neutral-900/60 p-6 rounded-xl border-2 border-neutral-700 hover:border-amber-500 h-full flex flex-col animated backdrop-blur-sm">
                              <div class="flex items-center mb-4">
-                                <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
                                 <h3 class="font-poppins text-sm md:text-base font-bold text-amber-400">Creative Events</h3>
                              </div>
                              <p class="text-neutral-300 flex-grow text-xs md:text-sm mb-4">For queries related to Photography, Videography, Meme Creation, etc.</p>
@@ -489,7 +512,7 @@
                 title: "Brain-ace (Quiz)",
                 summary: "A technical quiz on electrical, electronic, and mechanical components. Team up and test your knowledge.",
                 description: "A technical quiz designed to test knowledge of electrical, electronic, and mechanical components.",
-                rules: ["Team size: 2 members", "Open to all departments", "Rounds: Identification, Application, Rapid Fire"],
+                rules: ["Team size: 1 member", "Open to all departments", "Rounds: Identification, Application, Rapid Fire"],
                 judging: ["Scoring based on cumulative points across rounds"],
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_BRAIN_ACE"
             }
@@ -556,6 +579,30 @@
                 description: "A racquet sport played with a shuttlecock across a net.",
                 rules: ["Team Event (Doubles)", "Team Size: 5 players", "Best of 3 sets (21 points)", "Standard BWF rules"],
                 formLink: "YOUR_GOOGLE_FORM_URL_FOR_BADMINTON"
+            },
+            {
+                title: "Ball Badminton",
+                name: "Ball Badminton",
+                img: "https://placehold.co/600x600/1e293b/a1a1aa?text=Ball+Badminton",
+                description: "A team sport similar to badminton, but played with a yellow ball and racquets.",
+                rules: ["Team size: 5 players", "Standard Ball Badminton Federation rules apply"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_BALL_BADMINTON"
+            },
+            {
+                title: "Dodgeball",
+                name: "Dodgeball",
+                img: "https://placehold.co/600x600/1e293b/a1a1aa?text=Dodgeball",
+                description: "A game where players on two opposing teams try to throw balls at each other while avoiding being hit.",
+                rules: ["Team Size: 6 players", "Knockout format", "Standard Dodgeball rules apply"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_DODGEBALL"
+            },
+            {
+                title: "Yedu Penkulu",
+                name: "Yedu Penkulu",
+                img: "https://placehold.co/600x600/1e293b/a1a1aa?text=Yedu+Penkulu",
+                description: "A traditional game played with seven flat stones, a ball, and two teams.",
+                rules: ["Team Size: 5-7 players", "Two teams: one hitter, one fielder", "Knockout format"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_YEDU_PENKULU"
             },
             { 
                 title: "Kho-Kho", 
@@ -741,6 +788,19 @@
         sections.forEach(section => sectionObserver.observe(section));
         
         // --- Populate Event Cards ---
+        const allEvents = {
+            'technical-events-container': technicalEvents,
+            'non-technical-events-container': nonTechnicalEvents,
+            'outdoor-sports-container': outdoorSports,
+            'indoor-sports-container': indoorSports,
+            'spot-events-container': spotEvents,
+            'creative-events-container': creativeEvents
+        };
+        
+        const isRegistrationAvailable = (event) => {
+             return event.formLink && !event.formLink.includes('YOUR_GOOGLE_FORM_URL');
+        };
+
         const createEventCard = (event) => {
             const card = document.createElement('div');
             card.className = "event-card-main bg-gradient-to-br from-neutral-900 to-neutral-800 p-4 md:p-5 rounded-xl border-2 border-neutral-700 hover:border-amber-500 cursor-pointer h-full flex flex-col text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20";
@@ -769,33 +829,36 @@
             card.addEventListener('click', () => openModal(event));
             return card;
         };
-        
-        const eventSectionsToPopulate = [
-            { id: 'technical-events-container', data: technicalEvents, cardFn: createEventCard },
-            { id: 'non-technical-events-container', data: nonTechnicalEvents, cardFn: createEventCard },
-            { id: 'outdoor-sports-container', data: outdoorSports, cardFn: createSportCard },
-            { id: 'indoor-sports-container', data: indoorSports, cardFn: createSportCard },
-            { id: 'spot-events-container', data: spotEvents, cardFn: createEventCard },
-            { id: 'creative-events-container', data: creativeEvents, cardFn: createEventCard }
-        ];
-        
-        eventSectionsToPopulate.forEach(section => {
-            const container = document.getElementById(section.id);
-            if (container) {
-                container.innerHTML = '';
-                section.data.forEach(event => {
-                    try {
-                        const card = section.cardFn(event);
-                        container.appendChild(card);
-                    } catch (error) {
-                        console.error(`Error creating card for event:`, error, event);
-                    }
-                });
-            } else {
-                console.error(`Container with ID #${section.id} not found.`);
+
+        const populateEvents = (showOnlyAvailable) => {
+            for (const [containerId, eventsData] of Object.entries(allEvents)) {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '';
+                    eventsData.forEach(event => {
+                        if (showOnlyAvailable && !isRegistrationAvailable(event)) {
+                            return;
+                        }
+                        try {
+                            const cardFn = containerId.includes('sports') ? createSportCard : createEventCard;
+                            const card = cardFn(event);
+                            container.appendChild(card);
+                        } catch (error) {
+                            console.error(`Error creating card for event:`, error, event);
+                        }
+                    });
+                }
             }
+        };
+
+        const toggle = document.getElementById('available-toggle');
+        toggle.addEventListener('change', (e) => {
+            populateEvents(e.target.checked);
         });
 
+        // Initial population
+        populateEvents(false);
+        
         // --- Modal Logic ---
         const modal = document.getElementById('event-modal');
         const modalContent = modal.querySelector('.modal-content');
@@ -825,8 +888,7 @@
 
             // --- Registration Button Logic ---
             let registrationButtonHTML = '';
-            // Check specifically for TechBytes and if a valid form link exists
-            if (event.title === 'Tech-Bytes' && event.formLink && event.formLink.startsWith('http')) {
+            if (isRegistrationAvailable(event)) {
                 registrationButtonHTML = `
                     <div class="mt-6 text-center border-t border-neutral-700 pt-4">
                         <a href="${event.formLink}" target="_blank" rel="noopener noreferrer" class="btn-primary inline-block text-black font-bold py-2 px-8 rounded-lg transition-transform duration-300 hover:scale-105">
@@ -859,6 +921,7 @@
             modal.classList.add('opacity-0');
             setTimeout(() => modal.classList.add('invisible'), 300);
         }
+        
 
         modalClose.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => {
@@ -886,3 +949,4 @@
     </script>
 </body>
 </html>
+`
