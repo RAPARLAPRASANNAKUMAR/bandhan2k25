@@ -8,7 +8,15 @@
     <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"><            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>`,
+                title: "AlgoWars",
+                summary: "An individual coding competition to solve a series of algorithmic challenges against the clock. For C, C++, Java, Python lovers.",
+                description: "A programming contest where students solve problems ranging from beginner to advanced within the given time.",
+                rules: ["Individual participation", "Languages: C, C++, Java, Python", "Questions range from Easy to Hard"],
+                judging: ["Correctness", "Efficiency", "Time Taken"],
+                formLink: "YOUR_GOOGLE_FORM_URL_FOR_ALGOWARS"
+            },
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -455,7 +463,7 @@
                 description: "A platform for students to present and share their views on trending technologies or innovative ideas. Each participant will speak for 2-3 minutes on a given or chosen technical topic.",
                 rules: ["Individual participation", "Time limit: 2-3 minutes", "Topics can be given in advance or chosen with approval"],
                 judging: ["Content & Relevance", "Clarity of Speech & Confidence", "Creativity & Presentation", "Two awards: Judges' Choice & Popular Choice"],
-                formLink: "YOUR_GOOGLE_FORM_URL_FOR_TECH_BYTES"
+                formLink: "https://forms.gle/Pszsj5HN1wAQa1As9"
             },
             {
                 icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 14h.01M12 11h.01M12 8h.01M15 8h.01M9 8h.01M4 4h16v16H4V4z" /></svg>`,
@@ -849,8 +857,8 @@
 
             // --- Registration Button Logic ---
             let registrationButtonHTML = '';
-            // Check specifically for AlgoWars and if a valid form link exists
-            if (event.title === 'AlgoWars' && event.formLink && event.formLink.startsWith('http')) {
+            // Check specifically for TechBytes and if a valid form link exists
+            if (event.title === 'Tech-Bytes' && event.formLink && event.formLink.startsWith('http')) {
                 registrationButtonHTML = `
                     <div class="mt-6 text-center border-t border-neutral-700 pt-4">
                         <a href="${event.formLink}" target="_blank" rel="noopener noreferrer" class="btn-primary inline-block text-black font-bold py-2 px-8 rounded-lg transition-transform duration-300 hover:scale-105">
