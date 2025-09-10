@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aikya 2k25 - Badminton Auction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0F0C29;
+            background: -webkit-linear-gradient(to right, #24243E, #302B63, #0F0C29);
+            background: linear-gradient(to right, #24243E, #302B63, #0F0C29);
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .card {
+            background: rgba(36, 36, 62, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-glow {
+            box-shadow: 0 0 15px rgba(251, 197, 49, 0.3), 0 0 30px rgba(251, 197, 49, 0.2);
+        }
+        .btn { transition: all 0.3s ease; }
+        .btn-bid { background: linear-gradient(45deg, #fceabb, #f8b500); box-shadow: 0 4px 20px rgba(248, 181, 0, 0.4); }
+        .btn-bid:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 30px rgba(248, 181, 0, 0.5); }
+        .btn-admin { background: linear-gradient(45deg, #4CAF50, #81C784); box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4); }
+        .btn-admin:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 30px rgba(76, 175, 80, 0.5); }
+        .btn-preset { background: rgba(48, 43, 99, 0.8); border: 1px solid #302B63; }
+        .btn-preset:hover { background: #302B63; transform: scale(1.05); }
+        .input-code {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #302B63;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+        }
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 10px rgba(74, 222, 128, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(74, 222, 128, 0.8); }
+        }
+        .animate-pulse-green { animation: pulse-green 2s infinite; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+
+    <div id="app" class="container mx-auto p-4 md:p-6">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-6xl font-bold tracking-wider font-orbitron text-yellow-300">AIKYA 2K25</h1>
+            <p class="text-lg md:text-xl text-gray-300 mt-1">Badminton Premier League Auction</p>
+            <div id="user-info" class="mt-4 text-xs text-gray-400">Connecting...</div>
+            <div id="auction-info" class="mt-2 text-md text-yellow-300 font-orbitron hidden"></div>
+        </header>
+
+        <!-- Lobby -->
+        <div id="lobby">
+            <div class="max-w-md mx-auto card rounded-2xl p-8 text-center">
+                <h2 class="text-3xl font-bold font-orbitron mb-6">Join Auction</h2>
+                <div class="space-y-4">
+                    <input type="text" id="join-code-input" placeholder="ENTER AUCTION CODE" class="w-full p-3 rounded-lg input-code focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+                    <button id="join-auction-btn" class="w-full btn btn-bid text-black font-bold py-3 px-8 rounded-lg text-lg">Join Auction</button>
+                </div>
+            </div>
+             <div id="team-selection" class="max-w-lg mx-auto card rounded-2xl p-8 mt-6 hidden">
+                <h3 class="text-2xl font-bold font-orbitron mb-6 text-center">Claim Your Team</h3>
+                <div id="team-selection-list" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- Main Auction Area -->
+        <main id="auction-area" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 space-y-6">
+                <div id="currentPlayerCard" class="card rounded-2xl p-6 text-center shadow-lg relative overflow-hidden">
+                    <div id="loading-state" class="flex flex-col items-center justify-center h-full min-h-[400px] text-gray-300"><svg class="animate-spin h-10 w-10 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p class="text-lg font-semibold">Waiting for the auction to start...</p></div>
+                    <div id="player-details" class="hidden"><h2 class="text-xl font-semibold text-gray-400 mb-2">Currently Bidding On</h2><img id="player-image" src="https://placehold.co/150x150/2a338a/ffffff?text=Player" class="w-36 h-36 rounded-full mx-auto mb-4 border-4 border-yellow-400 object-cover shadow-lg"><h3 id="player-name" class="text-4xl font-bold font-orbitron text-yellow-300 tracking-wide"></h3><div id="timer-display" class="mt-2 text-2xl font-bold text-yellow-300 font-orbitron"></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-lg"><div class="card p-4 rounded-xl"><p class="text-sm text-gray-400">Base Price</p><p id="base-price" class="text-2xl font-semibold font-orbitron"></p></div><div class="card p-4 rounded-xl"><p class="text-sm text-gray-400">Current Bid</p><p id="current-bid" class="text-3xl font-bold text-green-400 font-orbitron"></p></div></div><div class="mt-4 card p-4 rounded-xl"><p class="text-sm text-gray-400">Highest Bidder</p><p id="highest-bidder" class="text-2xl font-medium flex items-center justify-center gap-2"></p></div></div>
+                </div>
+                <div id="bidding-controls" class="card rounded-2xl p-6 shadow-lg"><h3 class="text-xl font-semibold text-center mb-4">Place Your Bid</h3><div class="flex items-center justify-center gap-2 md:gap-4 mb-4"><button data-increment="0.5" class="btn btn-preset text-white font-bold py-3 px-5 rounded-lg text-lg">+0.5 L</button><button data-increment="1" class="btn btn-preset text-white font-bold py-3 px-5 rounded-lg text-lg">+1 L</button><button data-increment="2" class="btn btn-preset text-white font-bold py-3 px-5 rounded-lg text-lg">+2 L</button></div><div class="flex flex-col sm:flex-row gap-4 mt-4"><select id="team-select" class="w-full sm:w-1/3 p-3 rounded-lg bg-indigo-900/80 border border-indigo-700 focus:ring-2 focus:ring-yellow-400 focus:outline-none"></select><div class="w-full sm:w-1/3 flex items-center justify-center bg-indigo-900/80 p-3 rounded-lg border border-indigo-700"><span class="text-gray-400 mr-2">Next Bid:</span> <span id="next-bid-display" class="text-xl font-bold text-white font-orbitron"></span></div><button id="place-bid-btn" class="w-full sm:w-1/3 btn-bid text-black font-bold py-3 px-6 rounded-lg text-lg">PLACE BID</button></div></div>
+                
+            </div>
+            <div class="space-y-6"><div class="card rounded-2xl p-6 shadow-lg"><h3 class="text-2xl font-bold text-center mb-4 font-orbitron text-yellow-300">Teams</h3><div id="teams-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-2"></div></div><div class="card rounded-2xl p-6 shadow-lg"><h3 class="text-2xl font-bold text-center mb-4 font-orbitron text-yellow-300">Players Pool</h3><ul id="unsold-players-list" class="space-y-2 max-h-[350px] overflow-y-auto pr-2"></ul></div></div>
+        </main>
+
+        <div id="messageBox" class="fixed bottom-5 right-5 bg-green-500 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10"></div>
+        <div id="purse-modal" class="fixed inset-0 bg-black bg-opacity-80 z-40 hidden items-center justify-center p-4"><div class="card rounded-2xl p-8 max-w-lg w-full"><h2 class="text-3xl font-bold text-center mb-6 font-orbitron text-yellow-300">Team Purses Remaining</h2><div id="purse-details" class="space-y-4"></div><button id="continue-btn" class="mt-8 w-full btn btn-admin text-white font-bold py-3 px-8 rounded-lg">CONTINUE</button></div></div>
+        <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-4"><div class="card rounded-2xl p-8 max-w-md w-full text-center"><h2 class="text-2xl font-bold mb-4 font-orbitron">Are you sure?</h2><p class="text-gray-300 mb-6">This action cannot be undone.</p><div class="flex justify-center gap-4"><button id="confirm-yes-btn" class="btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-lg">Yes, Reset</button><button id="confirm-no-btn" class="btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-8 rounded-lg">Cancel</button></div></div></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, writeBatch, query, getDocs, where, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- DOM Elements ---
+        const dom = {
+            userInfo: document.getElementById('user-info'), auctionInfo: document.getElementById('auction-info'),
+            lobby: document.getElementById('lobby'), auctionArea: document.getElementById('auction-area'),
+            createAuctionBtn: document.getElementById('create-auction-btn'), joinCodeInput: document.getElementById('join-code-input'),
+            joinAuctionBtn: document.getElementById('join-auction-btn'), teamSelection: document.getElementById('team-selection'),
+            teamSelectionList: document.getElementById('team-selection-list'), loadingState: document.getElementById('loading-state'),
+            playerDetails: document.getElementById('player-details'), playerName: document.getElementById('player-name'),
+            playerImage: document.getElementById('player-image'), basePrice: document.getElementById('base-price'),
+            currentBid: document.getElementById('current-bid'), highestBidder: document.getElementById('highest-bidder'),
+            teamSelect: document.getElementById('team-select'), placeBidBtn: document.getElementById('place-bid-btn'),
+            teamsContainer: document.getElementById('teams-container'), unsoldPlayersList: document.getElementById('unsold-players-list'),
+            startNextBidBtn: document.getElementById('start-next-bid-btn'), sellPlayerBtn: document.getElementById('sell-player-btn'),
+            resetAuctionBtn: document.getElementById('reset-auction-btn'), messageBox: document.getElementById('messageBox'),
+            timerDisplay: document.getElementById('timer-display'), purseModal: document.getElementById('purse-modal'),
+            purseDetails: document.getElementById('purse-details'), continueBtn: document.getElementById('continue-btn'),
+            confirmModal: document.getElementById('confirm-modal'), confirmYes: document.getElementById('confirm-yes-btn'),
+            confirmNo: document.getElementById('confirm-no-btn'), nextBidDisplay: document.getElementById('next-bid-display'),
+            currentPlayerCard: document.getElementById('currentPlayerCard'), adminControls: document.getElementById('admin-controls'),
+            biddingControls: document.getElementById('bidding-controls'),
+        };
+
+        // --- App State & Config ---
+        let app, db, auth, userId, auctionId, userTeamId;
+        let teamsData = {};
+        let listeners = [];
+        let proposedBid = 0;
+        const synth = window.speechSynthesis;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'aikya2k25-auction';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "AIzaSyBNKUEPNcJEBXTk_Yc580eVVy8Mz0e5rDs", authDomain: "aikya2k25-11df9.firebaseapp.com", projectId: "aikya2k25-11df9" };
+
+        // --- Utility Functions ---
+        const formatToLakhs = (amount) => `${Number(amount).toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} L`;
+        const speak = (text) => {
+            if (synth.speaking) synth.cancel();
+            synth.speak(new SpeechSynthesisUtterance(text));
+        };
+        const showMessage = (message, isError = false) => {
+            dom.messageBox.textContent = message;
+            dom.messageBox.className = `fixed bottom-5 right-5 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10 ${isError ? 'bg-red-500' : 'bg-green-500'}`;
+            requestAnimationFrame(() => dom.messageBox.classList.remove('opacity-0', 'translate-y-10'));
+            setTimeout(() => dom.messageBox.classList.add('opacity-0', 'translate-y-10'), 3000);
+        };
+        
+        // --- Firebase & Data ---
+        async function initializeFirebase() {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                onAuthStateChanged(auth, user => {
+                    if (user) {
+                        userId = user.uid;
+                        dom.userInfo.textContent = `Connected as User: ${userId.substring(0, 8)}...`;
+                    } else {
+                        listeners.forEach(unsub => unsub());
+                    }
+                });
+                await (typeof __initial_auth_token !== 'undefined' ? signInWithCustomToken(auth, __initial_auth_token) : signInAnonymously(auth));
+            } catch (error) { console.error("Firebase Init Error:", error); dom.userInfo.textContent = "Connection Error."; }
+        }
+        
+        const initialPlayers = [
+            { id: 'P01', name: 'P.V. Sindhu', basePrice: 20.0, status: 'unsold', imageUrl: 'https://placehold.co/150x150/fbc531/000000?text=PVS' }, { id: 'P02', name: 'Saina Nehwal', basePrice: 18.0, status: 'unsold', imageUrl: 'https://placehold.co/150x150/f9a825/000000?text=SN' }, { id: 'P03', name: 'K. Srikanth', basePrice: 19.0, status: 'unsold', imageUrl: 'https://placehold.co/150x150/fbc531/000000?text=KS' }, { id: 'P04', name: 'Lakshya Sen', basePrice: 17.0, status: 'unsold', imageUrl: 'https://placehold.co/150x150/f9a825/000000?text=LS' },
+        ];
+        const initialTeams = [
+            { id: 'T01', name: 'Smashing Sultans', budget: 100.0, players: [], captainId: null, logo: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-yellow-300"><path d="M12 2l2.5 5.5L20 9l-4.5 4L16 20l-4-2.5L8 20l.5-7L4 9l5.5-1.5z"/></svg>` }, { id: 'T02', name: 'Net Rippers', budget: 100.0, players: [], captainId: null, logo: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-red-400"><path fill-rule="evenodd" d="M12 21a9 9 0 100-18 9 9 0 000 18zm.707-11.707a1 1 0 00-1.414 0l-2 2a1 1 0 001.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414l-2-2z" clip-rule="evenodd" /></svg>` }, { id: 'T03', name: 'Court Kings', budget: 100.0, players: [], captainId: null, logo: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-blue-300"><path d="M13 2.03v2.02c4.39.54 7.5 4.53 6.96 8.92-.46 3.8-3.35 6.93-7.02 7.02v2c5.5-.55 9.5-5.43 8.95-10.93-.5-4.84-4.44-8.6-9.2-8.98zM5.05 5.05c-4.88 4.88-4.88 12.8 0 17.68s12.8 4.88 17.68 0c-4.88-4.88-12.8-4.88-17.68 0z"/></svg>` }, { id: 'T04', name: 'Shuttle Masters', budget: 100.0, players: [], captainId: null, logo: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-green-300"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v4h-2zm0 6h2v2h-2z"/></svg>` },
+        ];
+        
+        function getAuctionDoc(id, ...path) { return doc(db, `artifacts/${appId}/public/data/badminton-auctions`, id, ...path); }
+        function getAuctionCol(id, ...path) { return collection(db, `artifacts/${appId}/public/data/badminton-auctions`, id, ...path); }
+
+        async function handleJoinAuction() {
+            const code = dom.joinCodeInput.value.toUpperCase();
+            if (!code) return showMessage("Please enter an auction code.", true);
+            const auctionDoc = await getDoc(getAuctionDoc(code));
+            
+            // The document path for state is nested, so we check the top-level auction doc first
+            if (!auctionDoc.exists()) {
+                 const auctionStateRef = getAuctionDoc(code, 'state', 'auctionState');
+                 if (!(await getDoc(auctionStateRef)).exists()) return showMessage("Invalid auction code.", true);
+            }
+
+
+            auctionId = code;
+            const teamsSnapshot = await getDocs(getAuctionCol(auctionId, 'teams'));
+            const teamsList = teamsSnapshot.docs.map(d => ({id: d.id, ...d.data()}));
+            
+            const availableTeams = teamsList.filter(t => !t.captainId);
+            const myTeam = teamsList.find(t => t.captainId === userId);
+
+            if (myTeam) {
+                userTeamId = myTeam.id;
+                enterAuction();
+                return;
+            }
+            
+            if (availableTeams.length === 0) return showMessage("All teams in this auction are already claimed.", true);
+
+            dom.teamSelectionList.innerHTML = availableTeams.map(t => `<button data-teamid="${t.id}" class="w-full btn btn-preset text-white font-bold py-3 px-8 rounded-lg text-lg flex items-center justify-center gap-3">${t.logo} ${t.name}</button>`).join('');
+            dom.teamSelection.classList.remove('hidden');
+        }
+
+        async function handleSelectTeam(e) {
+            const selectedTeamId = e.target.closest('button').dataset.teamid;
+            if (!selectedTeamId) return;
+
+            const teamRef = getAuctionDoc(auctionId, 'teams', selectedTeamId);
+            try {
+                await runTransaction(db, async (transaction) => {
+                    const teamDoc = await transaction.get(teamRef);
+                    if (!teamDoc.exists() || teamDoc.data().captainId) throw new Error("Team already claimed.");
+                    transaction.update(teamRef, { captainId: userId });
+                });
+                userTeamId = selectedTeamId;
+                enterAuction();
+            } catch (error) {
+                console.error("Failed to claim team: ", error);
+                showMessage(error.message, true);
+            }
+        }
+        
+        function enterAuction() {
+            dom.lobby.classList.add('hidden');
+            dom.auctionArea.classList.remove('hidden');
+            dom.auctionArea.classList.add('grid');
+            dom.auctionInfo.innerHTML = `AUCTION CODE: <span class="tracking-widest">${auctionId}</span>`;
+            dom.auctionInfo.classList.remove('hidden');
+
+            dom.teamSelect.value = userTeamId;
+            dom.teamSelect.disabled = true;
+            
+            setupListeners();
+        }
+
+        function setupListeners() {
+            listeners.forEach(unsub => unsub()); listeners = [];
+            listeners.push(onSnapshot(getAuctionDoc(auctionId, 'state', 'auctionState'), updateAuctionStateUI));
+            const playersQuery = query(getAuctionCol(auctionId, 'players'), where("status", "==", "unsold"));
+            listeners.push(onSnapshot(playersQuery, snap => updateUnsoldPlayersUI(snap.docs.map(d => d.data()))));
+            listeners.push(onSnapshot(getAuctionCol(auctionId, 'teams'), snap => {
+                const teams = snap.docs.map(d => d.data());
+                teamsData = teams.reduce((acc, team) => ({ ...acc, [team.id]: team }), {});
+                updateTeamsUI(teams);
+                updateTeamSelect(teams);
+                if (userTeamId) dom.teamSelect.value = userTeamId;
+            }));
+        }
+        
+        // async function updateAuctionStateUI(docSnap) { /* ... unchanged ... */ }
+        // function updateCountdown(timestamp) { /* ... unchanged ... */ }
+        // const updateUnsoldPlayersUI = (players) => { /* ... unchanged ... */ };
+        // const updateTeamsUI = (teams) => { /* ... unchanged ... */ };
+        // const updateTeamSelect = (teams) => { /* ... unchanged ... */ };
+        // const updateProposedBid = (amount) => { /* ... unchanged ... */ };
+        
+        // --- Action Handlers (Modified for Auction ID) ---
+        async function handlePlaceBid() {
+            const teamId = userTeamId; // Captains can only bid for their own team
+            const state = (await getDoc(getAuctionDoc(auctionId, 'state', 'auctionState'))).data();
+            if (proposedBid <= state.currentBid) return showMessage("Bid must be higher.", true);
+            if (proposedBid > teamsData[teamId].budget) return showMessage("Bid exceeds budget.", true);
+            await updateDoc(getAuctionDoc(auctionId, 'state', 'auctionState'), { currentBid: proposedBid, highestBidder: teamId, bidTimestamp: Date.now() });
+            showMessage(`Bid of ${formatToLakhs(proposedBid)} by ${teamsData[teamId].name}!`, false);
+        }
+        
+        async function handleSellPlayer() {
+            const state = (await getDoc(getAuctionDoc(auctionId, 'state', 'auctionState'))).data();
+            if (!state.currentPlayerId || state.highestBidder === 'None') return;
+            const playerRef = getAuctionDoc(auctionId, 'players', state.currentPlayerId);
+            const teamRef = getAuctionDoc(auctionId, 'teams', state.highestBidder);
+            const teamDoc = teamsData[state.highestBidder];
+            const player = (await getDoc(playerRef)).data();
+            const batch = writeBatch(db);
+            batch.update(playerRef, { status: 'sold', soldTo: teamDoc.name, soldFor: state.currentBid });
+            batch.update(teamRef, { budget: teamDoc.budget - state.currentBid, players: [...teamDoc.players, player.name] });
+            batch.update(getAuctionDoc(auctionId, 'state', 'auctionState'), { status: 'sold', bidTimestamp: null });
+            await batch.commit();
+            const soldMsg = `${player.name} sold to ${teamDoc.name} for ${formatToLakhs(state.currentBid)}`;
+            speak(soldMsg); showMessage(soldMsg, false); showPurseModal();
+        }
+
+        async function handleStartNextBid() {
+            const playersQuery = query(getAuctionCol(auctionId, 'players'), where("status", "==", "unsold"));
+            const playersSnapshot = await getDocs(playersQuery);
+            const stateRef = getAuctionDoc(auctionId, 'state', 'auctionState');
+            if (playersSnapshot.empty) {
+                await updateDoc(stateRef, { status: 'finished', currentPlayerId: null });
+                return showMessage("Auction finished!", true);
+            }
+            const nextPlayer = playersSnapshot.docs[0].data();
+            await updateDoc(stateRef, { status: 'in_progress', currentPlayerId: playersSnapshot.docs[0].id, currentBid: nextPlayer.basePrice, highestBidder: 'None', bidTimestamp: null });
+            showMessage(`Bidding starts for ${nextPlayer.name}!`, false);
+        }
+        
+        // function showPurseModal() { /* ... unchanged ... */ }
+        let resetCallback = null;
+        // function confirmReset(callback) { /* ... unchanged ... */ }
+
+        // --- Event Listeners ---
+        document.querySelectorAll('.btn-preset').forEach(btn => btn.addEventListener('click', async (e) => {
+            const increment = parseFloat(e.target.dataset.increment);
+            const stateDoc = await getDoc(getAuctionDoc(auctionId, 'state', 'auctionState'));
+            if (!stateDoc.exists()) return;
+            const state = stateDoc.data();
+            if (state.status !== 'in_progress') return;
+            updateProposedBid(proposedBid + increment);
+        }));
+        
+        dom.joinAuctionBtn.addEventListener('click', handleJoinAuction);
+        dom.teamSelectionList.addEventListener('click', handleSelectTeam);
+        dom.confirmYes.addEventListener('click', () => { if (resetCallback) resetCallback(); dom.confirmModal.classList.add('hidden'); });
+        dom.confirmNo.addEventListener('click', () => { resetCallback = null; dom.confirmModal.classList.add('hidden'); });
+        dom.placeBidBtn.addEventListener('click', handlePlaceBid);
+        
+        initializeFirebase();
+        
+        // --- Unchanged Functions (Re-included for completeness) ---
+        async function updateAuctionStateUI(docSnap) {
+            if (!docSnap.exists()) return;
+            const state = docSnap.data();
+            const hasPlayer = state.status === 'in_progress' && state.currentPlayerId;
+            dom.loadingState.style.display = hasPlayer ? 'none' : 'flex';
+            dom.playerDetails.style.display = hasPlayer ? 'block' : 'none';
+           
+            dom.currentPlayerCard.classList.toggle('card-glow', hasPlayer);
+
+            if (hasPlayer) {
+                const playerDoc = await getDoc(getAuctionDoc(auctionId, 'players', state.currentPlayerId));
+                if (!playerDoc.exists()) return;
+                const player = playerDoc.data();
+
+                dom.playerName.textContent = player.name;
+                dom.playerImage.src = player.imageUrl || 'https://placehold.co/150x150/2a338a/ffffff?text=Player';
+                dom.playerImage.onerror = () => { dom.playerImage.src = 'https://placehold.co/150x150/2a338a/ffffff?text=Error'; };
+                dom.basePrice.textContent = formatToLakhs(player.basePrice);
+                dom.currentBid.textContent = formatToLakhs(state.currentBid);
+                const bidderTeam = teamsData[state.highestBidder];
+                dom.highestBidder.innerHTML = bidderTeam ? `${bidderTeam.logo} ${bidderTeam.name}` : 'None';
+                updateProposedBid(state.currentBid + 0.5);
+                updateCountdown(state.bidTimestamp);
+            } else { updateCountdown(null); }
+        }
+        function updateCountdown(timestamp) {
+            let countdownInterval, goingOnceTimeout, goingTwiceTimeout;
+            clearInterval(countdownInterval); clearTimeout(goingOnceTimeout); clearTimeout(goingTwiceTimeout);
+            dom.timerDisplay.textContent = '';
+            if (!timestamp) return;
+            countdownInterval = setInterval(() => {
+                const secondsLeft = 10 - Math.floor((Date.now() - timestamp) / 1000);
+                dom.timerDisplay.textContent = secondsLeft > 0 ? `${secondsLeft}s` : "Time's up!";
+                if (secondsLeft <= 0) clearInterval(countdownInterval);
+            }, 1000);
+            goingOnceTimeout = setTimeout(() => speak("Going once"), 5000);
+            goingTwiceTimeout = setTimeout(() => speak("Going twice"), 8000);
+        }
+        const updateUnsoldPlayersUI = (players) => { dom.unsoldPlayersList.innerHTML = players.length === 0 ? '<li class="text-gray-400 text-center">All players sold!</li>' : players.map(p => `<li class="flex justify-between items-center bg-indigo-900/50 p-2 rounded-lg"><span>${p.name}</span><span class="font-semibold text-sm text-gray-300">${formatToLakhs(p.basePrice)}</span></li>`).join(''); };
+        const updateTeamsUI = (teams) => { dom.teamsContainer.innerHTML = teams.map(t => `<div class="card p-3 rounded-lg"><div class="flex justify-between items-center mb-1"><h4 class="font-bold text-lg flex items-center gap-2">${t.logo} ${t.name}</h4><span class="font-semibold text-green-400 font-orbitron">${formatToLakhs(t.budget)}</span></div><p class="text-xs text-gray-400 pl-8">Players: ${t.players.join(', ') || 'None'}</p></div>`).join(''); };
+        const updateTeamSelect = (teams) => { dom.teamSelect.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join(''); };
+        const updateProposedBid = (amount) => { proposedBid = Math.round(amount * 2) / 2; dom.nextBidDisplay.textContent = formatToLakhs(proposedBid); };
+        function showPurseModal() { dom.purseDetails.innerHTML = Object.values(teamsData).map(t => `<div class="flex justify-between items-center bg-indigo-900/50 p-3 rounded-lg"><span class="font-semibold flex items-center gap-2">${t.logo} ${t.name}</span><span class="font-bold text-green-400 font-orbitron">${formatToLakhs(t.budget)}</span></div>`).join(''); dom.purseModal.classList.remove('hidden'); dom.purseModal.classList.add('flex'); }
+        function confirmReset(callback) { resetCallback = callback; dom.confirmModal.classList.remove('hidden'); dom.confirmModal.classList.add('flex'); }
+    </script>
+</body>
+</html>
+
+
