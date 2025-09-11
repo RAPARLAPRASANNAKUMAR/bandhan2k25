@@ -108,6 +108,7 @@
                     <div class="flex gap-2 mt-4">
                         <button id="show-add-player-btn" class="w-full btn btn-admin text-white font-bold py-2 px-6 rounded-lg text-sm">Add Player</button>
                         <button id="show-excel-upload-btn" class="w-full btn btn-admin text-white font-bold py-2 px-6 rounded-lg text-sm">Upload Excel</button>
+                        <button id="show-sheets-import-btn" class="w-full btn btn-action text-black font-bold py-2 px-6 rounded-lg text-sm">Import Sheets</button>
                     </div>
                 </div>
             </div>
@@ -119,6 +120,7 @@
         <div id="add-team-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-2xl font-bold font-orbitron mb-6 text-center">Add New Team</h2><form id="add-team-form" class="space-y-4"><input type="text" id="team-id" placeholder="Team ID (e.g., T05)" class="w-full p-3 rounded-lg input-form uppercase focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="text" id="team-name" placeholder="Team Name" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="number" step="0.1" id="team-budget" placeholder="Budget (in Lakhs)" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><div class="flex gap-4"><button type="submit" class="w-full btn btn-admin text-white font-bold py-3 rounded-lg">Add Team</button><button type="button" class="modal-close w-full btn bg-gray-600 text-white font-bold py-3 rounded-lg">Cancel</button></div></form></div></div>
         <div id="add-player-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-2xl font-bold font-orbitron mb-6 text-center">Add New Player</h2><form id="add-player-form" class="space-y-4"><input type="text" id="player-id" placeholder="Player ID (e.g., P09)" class="w-full p-3 rounded-lg input-form uppercase focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="text" id="player-name-input" placeholder="Player Name" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="number" step="0.1" id="player-base-price" placeholder="Base Price (in Lakhs)" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="url" id="player-image-url" placeholder="Image URL (https://...)" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><div class="flex gap-4"><button type="submit" class="w-full btn btn-admin text-white font-bold py-3 rounded-lg">Add Player</button><button type="button" class="modal-close w-full btn bg-gray-600 text-white font-bold py-3 rounded-lg">Cancel</button></div></form></div></div>
         <div id="excel-upload-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-2xl font-bold font-orbitron mb-6 text-center">Upload Players from Excel</h2><div class="space-y-4"><input type="file" id="excel-file-input" accept=".xlsx, .xls" class="w-full p-3 rounded-lg input-form"><p class="text-xs text-gray-400">Excel must have columns: ID, Name, Base Price, Image URL. Google Drive links in 'Image URL' will be used directly. For automatic upload to Firebase Storage, use the provided Python script.</p><div class="flex gap-4"><button id="upload-excel-btn" class="w-full btn btn-admin text-white font-bold py-3 rounded-lg">Upload</button><button type="button" class="modal-close w-full btn bg-gray-600 text-white font-bold py-3 rounded-lg">Cancel</button></div></div></div></div>
+        <div id="sheets-import-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-2xl font-bold font-orbitron mb-6 text-center">Import from Google Sheets</h2><div class="space-y-4"><input type="url" id="sheets-url-input" placeholder="https://docs.google.com/spreadsheets/d/..." class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none"><textarea id="sheets-data-input" placeholder="Or paste CSV data here..." class="w-full h-32 p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none"></textarea><p class="text-xs text-gray-400">Paste your Google Sheets URL or CSV data. Expected format: Name, Base Price, Image URL (one player per line)</p><div class="flex gap-4"><button id="import-sheets-btn" class="w-full btn btn-action text-black font-bold py-3 rounded-lg">Import</button><button type="button" class="modal-close w-full btn bg-gray-600 text-white font-bold py-3 rounded-lg">Cancel</button></div></div></div></div>
         <div id="purse-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-3xl font-bold text-center mb-6 font-orbitron text-yellow-300">Team Purses Remaining</h2><div id="purse-details" class="space-y-4"></div><button id="continue-btn" class="mt-8 w-full btn btn-admin text-white font-bold py-3 px-8 rounded-lg">OK</button></div></div>
         <div id="confirm-modal" class="modal"><div class="modal-content card rounded-2xl p-8 text-center"><h2 class="text-2xl font-bold mb-4 font-orbitron">Are you sure?</h2><p id="confirm-text" class="text-gray-300 mb-6">This action cannot be undone.</p><div class="flex justify-center gap-4"><button id="confirm-yes-btn" class="btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-lg">Yes</button><button id="confirm-no-btn" class="btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-8 rounded-lg">Cancel</button></div></div></div>
     </div>
@@ -140,13 +142,15 @@
             unsoldPlayersList: document.getElementById('unsold-players-list'), startNextBidBtn: document.getElementById('start-next-bid-btn'),
             sellPlayerBtn: document.getElementById('sell-player-btn'), resetAuctionBtn: document.getElementById('reset-auction-btn'),
             showAddTeamBtn: document.getElementById('show-add-team-btn'), showAddPlayerBtn: document.getElementById('show-add-player-btn'),
-            showExcelUploadBtn: document.getElementById('show-excel-upload-btn'),
+            showExcelUploadBtn: document.getElementById('show-excel-upload-btn'), showSheetsImportBtn: document.getElementById('show-sheets-import-btn'),
             messageBox: document.getElementById('messageBox'),
             createAuctionModal: document.getElementById('create-auction-modal'), createAuctionForm: document.getElementById('create-auction-form'),
             addTeamModal: document.getElementById('add-team-modal'), addTeamForm: document.getElementById('add-team-form'),
             addPlayerModal: document.getElementById('add-player-modal'), addPlayerForm: document.getElementById('add-player-form'),
             excelUploadModal: document.getElementById('excel-upload-modal'), excelFileInput: document.getElementById('excel-file-input'),
             uploadExcelBtn: document.getElementById('upload-excel-btn'),
+            sheetsImportModal: document.getElementById('sheets-import-modal'), sheetsUrlInput: document.getElementById('sheets-url-input'),
+            sheetsDataInput: document.getElementById('sheets-data-input'), importSheetsBtn: document.getElementById('import-sheets-btn'),
             purseModal: document.getElementById('purse-modal'), purseDetails: document.getElementById('purse-details'), continueBtn: document.getElementById('continue-btn'),
             confirmModal: document.getElementById('confirm-modal'), confirmYes: document.getElementById('confirm-yes-btn'),
             confirmNo: document.getElementById('confirm-no-btn'), confirmText: document.getElementById('confirm-text'),
@@ -211,6 +215,56 @@
             reader.readAsArrayBuffer(file);
         }
 
+        async function handleSheetsImport() {
+            const csvData = dom.sheetsDataInput.value.trim();
+            if (!csvData) return showMessage("Please paste CSV data from Google Sheets.", true);
+
+            try {
+                const lines = csvData.split('\n').filter(line => line.trim());
+                if (lines.length === 0) return showMessage("No data found in the input.", true);
+
+                const batch = writeBatch(db);
+                let count = 0;
+                let playerIdCounter = 1;
+
+                lines.forEach(line => {
+                    const columns = line.split(',').map(col => col.trim().replace(/"/g, ''));
+                    
+                    // Assuming format: Name, Base Price, Image URL or similar
+                    if (columns.length >= 2) {
+                        const name = columns[0];
+                        const basePrice = parseFloat(columns[1]) || 1.0; // Default base price
+                        const imageUrl = columns[2] || 'https://placehold.co/150x150/2a338a/ffffff?text=Player'; // Default placeholder
+                        
+                        if (name) {
+                            const id = `P${String(playerIdCounter).padStart(3, '0')}`;
+                            const playerRef = getAuctionDoc(auctionId, 'players', id);
+                            const playerData = { 
+                                id, 
+                                name: name.trim(), 
+                                basePrice: basePrice, 
+                                imageUrl: imageUrl.trim(), 
+                                status: 'unsold' 
+                            };
+                            batch.set(playerRef, playerData);
+                            count++;
+                            playerIdCounter++;
+                        }
+                    }
+                });
+
+                if (count === 0) return showMessage("No valid player data found.", true);
+
+                await batch.commit();
+                showMessage(`${count} players imported successfully from Google Sheets.`, false);
+                dom.sheetsImportModal.style.display = 'none';
+                dom.sheetsDataInput.value = '';
+            } catch (error) {
+                console.error("Error importing Google Sheets data:", error);
+                showMessage("Failed to import data. Check format and try again.", true);
+            }
+        }
+
         // async function handleManageAuction() { /* Unchanged */ }
         // function enterAdminDashboard() { /* Unchanged */ }
         // function setupListeners() { /* Unchanged */ }
@@ -269,11 +323,21 @@
         dom.addPlayerForm.addEventListener('submit', handleAddPlayer);
         dom.showExcelUploadBtn.addEventListener('click', () => dom.excelUploadModal.style.display = 'flex');
         dom.uploadExcelBtn.addEventListener('click', handleExcelUpload);
+        dom.showSheetsImportBtn.addEventListener('click', () => dom.sheetsImportModal.style.display = 'flex');
+        dom.importSheetsBtn.addEventListener('click', handleSheetsImport);
         
         document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.closest('.modal').addEventListener('click', (e) => {
-                if (e.target === btn.closest('.modal') || btn.classList.contains('modal-close')) {
-                    btn.closest('.modal').style.display = 'none';
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                btn.closest('.modal').style.display = 'none';
+            });
+        });
+
+        // Handle clicking outside modal to close
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
                 }
             });
         });
