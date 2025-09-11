@@ -145,9 +145,15 @@
         // Admin check function - Add admin user IDs here
         const isAdmin = (userId) => {
             const adminUserIds = [
-                // Add admin user IDs here - you can get these from the console when users connect
-                // Example: 'x1y2z3a4b5c6d7e8',
-                // For now, we'll make the first team captain an admin
+                // Add admin user IDs here - you can get these from the browser console when users connect
+                // Example: 'x1y2z3a4b5c6d7e8f9g0h1i2j3k4l5m6',
+                // 
+                // TO SET UP ADMIN:
+                // 1. Have the admin user join the auction
+                // 2. Check browser console for "User connected with ID: xyz..."
+                // 3. Copy that ID and add it to this array
+                // 4. Admin will control all auction announcements ("Going once", "Going twice", "Sold")
+                // 5. Only admin announcements will be heard by all users
             ];
             return adminUserIds.includes(userId);
         };
@@ -266,6 +272,17 @@
                 if (userTeamId) dom.teamSelect.value = userTeamId;
             }));
             
+            // Listen for announcements from admin
+            listeners.push(onSnapshot(getAuctionDoc(auctionId, 'state', 'announcement'), (docSnap) => {
+                if (docSnap.exists()) {
+                    const announcementData = docSnap.data();
+                    // Play announcement for all users (but only trigger speech for recent announcements)
+                    if (Date.now() - announcementData.timestamp < 5000) { // Within 5 seconds
+                        speak(announcementData.message);
+                    }
+                }
+            }));
+            
             // Check if user is admin and show/hide admin features
             toggleAdminFeatures(isAdmin(userId));
         }
@@ -281,6 +298,12 @@
         async function handlePlaceBid() {
             const teamId = userTeamId; // Captains can only bid for their own team
             const state = (await getDoc(getAuctionDoc(auctionId, 'state', 'auctionState'))).data();
+            
+            // Check if bidding time has expired (10 seconds after last bid)
+            if (state.bidTimestamp && (Date.now() - state.bidTimestamp) >= 10000) {
+                return showMessage("Bidding time has expired! No more bids accepted.", true);
+            }
+            
             if (proposedBid <= state.currentBid) return showMessage("Bid must be higher.", true);
             if (proposedBid > teamsData[teamId].budget) return showMessage("Bid exceeds budget.", true);
             await updateDoc(getAuctionDoc(auctionId, 'state', 'auctionState'), { currentBid: proposedBid, highestBidder: teamId, bidTimestamp: Date.now() });
@@ -365,17 +388,49 @@
             } else { updateCountdown(null); }
         }
         function updateCountdown(timestamp) {
-            let countdownInterval, goingOnceTimeout, goingTwiceTimeout;
-            clearInterval(countdownInterval); clearTimeout(goingOnceTimeout); clearTimeout(goingTwiceTimeout);
+            let countdownInterval, goingOnceTimeout, goingTwiceTimeout, soldTimeout;
+            clearInterval(countdownInterval); clearTimeout(goingOnceTimeout); clearTimeout(goingTwiceTimeout); clearTimeout(soldTimeout);
             dom.timerDisplay.textContent = '';
             if (!timestamp) return;
+            
             countdownInterval = setInterval(() => {
                 const secondsLeft = 10 - Math.floor((Date.now() - timestamp) / 1000);
                 dom.timerDisplay.textContent = secondsLeft > 0 ? `${secondsLeft}s` : "Time's up!";
-                if (secondsLeft <= 0) clearInterval(countdownInterval);
+                if (secondsLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    // Disable bidding controls when time is up
+                    dom.placeBidBtn.disabled = true;
+                    dom.placeBidBtn.textContent = "BIDDING CLOSED";
+                    dom.placeBidBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    // Re-enable bidding controls if new bid is placed
+                    dom.placeBidBtn.disabled = false;
+                    dom.placeBidBtn.textContent = "PLACE BID";
+                    dom.placeBidBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
             }, 1000);
-            goingOnceTimeout = setTimeout(() => speak("Going once"), 5000);
-            goingTwiceTimeout = setTimeout(() => speak("Going twice"), 8000);
+
+            // Only admin users can trigger announcements
+            if (isAdmin(userId)) {
+                goingOnceTimeout = setTimeout(() => broadcastAnnouncement("Going once"), 5000);      // At 5 seconds (5s remaining)
+                goingTwiceTimeout = setTimeout(() => broadcastAnnouncement("Going twice"), 8000);    // At 8 seconds (2s remaining)  
+                soldTimeout = setTimeout(() => broadcastAnnouncement("Sold"), 10000);                // At 10 seconds (0s remaining)
+            }
+        }
+
+        // Admin-only function to broadcast announcements to all users
+        async function broadcastAnnouncement(message) {
+            if (!isAdmin(userId)) return; // Double-check admin status
+            
+            try {
+                // Store announcement in Firebase for all users to hear
+                await setDoc(getAuctionDoc(auctionId, 'state', 'announcement'), {
+                    message: message,
+                    timestamp: Date.now()
+                });
+            } catch (error) {
+                console.error("Failed to broadcast announcement:", error);
+            }
         }
         const updateUnsoldPlayersUI = (players) => { dom.unsoldPlayersList.innerHTML = players.length === 0 ? '<li class="text-gray-400 text-center">All players sold!</li>' : players.map(p => `<li class="flex justify-between items-center bg-indigo-900/50 p-2 rounded-lg"><span>${p.name}</span><span class="font-semibold text-sm text-gray-300">${formatToLakhs(p.basePrice)}</span></li>`).join(''); };
         const updateTeamsUI = (teams) => { dom.teamsContainer.innerHTML = teams.map(t => `<div class="card p-3 rounded-lg"><div class="flex justify-between items-center mb-1"><h4 class="font-bold text-lg flex items-center gap-2">${t.logo} ${t.name}</h4><span class="font-semibold text-green-400 font-orbitron">${formatToLakhs(t.budget)}</span></div><p class="text-xs text-gray-400 pl-8">Players: ${t.players.join(', ') || 'None'}</p></div>`).join(''); };
