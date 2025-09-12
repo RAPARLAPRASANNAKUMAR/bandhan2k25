@@ -27,6 +27,12 @@
             box-shadow: 0 0 15px rgba(251, 197, 49, 0.3), 0 0 30px rgba(251, 197, 49, 0.2);
         }
         .btn { transition: all 0.3s ease; }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
         .btn-bid { background: linear-gradient(45deg, #fceabb, #f8b500); box-shadow: 0 4px 20px rgba(248, 181, 0, 0.4); }
         .btn-bid:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 30px rgba(248, 181, 0, 0.5); }
         .btn-preset { background: rgba(36, 59, 85, 0.8); border: 1px solid #243B55; }
@@ -195,6 +201,7 @@
                 updateTeamsUI(teams);
                 updateTeamSelect(teams);
                 if (userTeamId) dom.teamSelect.value = userTeamId;
+                updateBidButtonsState(); // Update buttons when team data changes
             }));
         }
         
@@ -226,10 +233,54 @@
             }
         }
 
+        function updateBidButtonsState() {
+            if (!userTeamId || !teamsData[userTeamId]) return;
+            const budget = teamsData[userTeamId].budget;
+
+            document.querySelectorAll('.btn-preset').forEach(btn => {
+                const increment = parseFloat(btn.dataset.increment);
+                if (proposedBid + increment > budget) {
+                    btn.disabled = true;
+                } else {
+                    btn.disabled = false;
+                }
+            });
+
+            if (proposedBid > budget) {
+                dom.placeBidBtn.disabled = true;
+            } else {
+                dom.placeBidBtn.disabled = false;
+            }
+        }
+
         const updateUnsoldPlayersUI = (players) => { dom.unsoldPlayersList.innerHTML = players.length === 0 ? '<li class="text-gray-400 text-center">All players sold!</li>' : players.map(p => `<li class="flex justify-between items-center bg-indigo-900/50 p-2 rounded-lg"><span>${p.name}</span><span class="font-semibold text-sm text-gray-300">${formatToLakhs(p.basePrice)}</span></li>`).join(''); };
-        const updateTeamsUI = (teams) => { dom.teamsContainer.innerHTML = teams.map(t => `<div class="card p-4 rounded-lg"><div class="flex items-center justify-between"><div class="flex items-center gap-3"><span class="text-2xl">${t.logo || '🏆'}</span><h4 class="font-bold text-lg truncate" title="${t.name}">${t.name}</h4></div><span class="font-semibold text-green-400 font-orbitron text-lg">${formatToLakhs(t.budget)}</span></div><p class="text-xs text-gray-400 mt-2">Players: ${t.players.join(', ') || 'None'}</p></div>`).join(''); };
+        const updateTeamsUI = (teams) => { 
+            dom.teamsContainer.innerHTML = teams.map(t => `
+                <div class="card p-3 rounded-lg flex flex-col gap-2">
+                    <!-- Top Row: Name and Budget -->
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">${t.logo || '🏆'}</span>
+                            <h4 class="font-bold text-lg leading-tight">${t.name}</h4>
+                        </div>
+                        <span class="font-semibold text-green-400 font-orbitron text-lg whitespace-nowrap">${formatToLakhs(t.budget)}</span>
+                    </div>
+                    <!-- Bottom Row: Players -->
+                    <div class="pl-12"> <!-- Indent to align with team name -->
+                        <p class="text-xs text-gray-400 leading-tight">
+                            <span class="font-semibold text-gray-300">Players:</span> 
+                            ${t.players.join(', ') || 'None'}
+                        </p>
+                    </div>
+                </div>
+            `).join(''); 
+        };
         const updateTeamSelect = (teams) => { dom.teamSelect.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join(''); };
-        const updateProposedBid = (amount) => { proposedBid = Math.round(amount * 2) / 2; dom.nextBidDisplay.textContent = formatToLakhs(proposedBid); };
+        const updateProposedBid = (amount) => { 
+            proposedBid = Math.round(amount * 2) / 2; 
+            dom.nextBidDisplay.textContent = formatToLakhs(proposedBid); 
+            updateBidButtonsState();
+        };
 
         async function handlePlaceBid() {
             const teamId = userTeamId;
@@ -263,7 +314,9 @@
         
         document.querySelectorAll('.btn-preset').forEach(btn => btn.addEventListener('click', async () => {
             const increment = parseFloat(btn.dataset.increment);
-            const state = (await getDoc(getAuctionDoc(auctionId, 'state', 'auctionState'))).data();
+            const stateDoc = await getDoc(getAuctionDoc(auctionId, 'state', 'auctionState'));
+            if (!stateDoc.exists()) return;
+            const state = stateDoc.data();
             if (state.status !== 'in_progress') return;
             updateProposedBid(proposedBid + increment);
         }));
@@ -276,6 +329,5 @@
     </script>
 </body>
 </html>
-
 
 
