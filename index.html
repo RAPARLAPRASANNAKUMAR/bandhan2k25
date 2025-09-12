@@ -10,36 +10,47 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --background-start: #141E30;
+            --background-end: #243B55;
+            --card-bg: rgba(20, 30, 48, 0.75);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent-yellow: #f8b500;
+            --accent-glow: rgba(248, 181, 0, 0.3);
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: #141E30;
-            background: -webkit-linear-gradient(to right, #243B55, #141E30);
-            background: linear-gradient(to right, #243B55, #141E30);
+            background: var(--background-start);
+            background: -webkit-linear-gradient(to right, var(--background-end), var(--background-start));
+            background: linear-gradient(to right, var(--background-end), var(--background-start));
+            color: var(--text-primary);
         }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .card {
-            background: rgba(20, 30, 48, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 1.5rem;
         }
-        .card-glow { box-shadow: 0 0 15px rgba(251, 197, 49, 0.3), 0 0 30px rgba(251, 197, 49, 0.2); }
-        .btn { transition: all 0.3s ease; }
-        .btn-action { background: linear-gradient(45deg, #fceabb, #f8b500); box-shadow: 0 4px 20px rgba(248, 181, 0, 0.4); }
+        .card-glow { box-shadow: 0 0 25px var(--accent-glow), 0 0 50px var(--accent-glow); }
+        .btn { transition: all 0.3s ease; border-radius: 0.75rem; }
+        .btn-action { background: linear-gradient(45deg, #fceabb, var(--accent-yellow)); box-shadow: 0 4px 20px rgba(248, 181, 0, 0.4); color: black; }
         .btn-action:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 30px rgba(248, 181, 0, 0.5); }
-        .btn-admin { background: linear-gradient(45deg, #4CAF50, #81C784); box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4); }
+        .btn-admin { background: linear-gradient(45deg, #4CAF50, #81C784); box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4); color: white; }
         .btn-admin:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 30px rgba(76, 175, 80, 0.5); }
-        .input-form {
-             background: rgba(0,0,0,0.3);
-             border: 1px solid #302B63;
-        }
+        .input-form { background: rgba(0,0,0,0.3); border: 1px solid #302B63; border-radius: 0.75rem; }
         .input-code {
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.4);
             border: 1px solid #302B63;
             text-align: center;
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 0.5em;
             text-transform: uppercase;
+            border-radius: 0.75rem;
         }
         .modal {
             display: none;
@@ -50,186 +61,203 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.85);
+            background-color: rgba(0,0,0,0.9);
             align-items: center;
             justify-content: center;
         }
-        .modal-content {
-            width: 90%;
-            max-width: 500px;
-        }
+        .modal-content { width: 90%; max-width: 500px; }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen">
+<body class="min-h-screen">
 
-    <div id="app" class="container mx-auto p-4 md:p-6">
+    <div id="app" class="container mx-auto p-4 md:p-8">
         
-        <header class="text-center mb-8">
+        <header class="text-center mb-10">
             <h1 class="text-4xl md:text-6xl font-bold tracking-wider font-orbitron text-yellow-300">ADMIN PANEL</h1>
-            <p class="text-lg md:text-xl text-gray-300 mt-1">Badminton Premier League Auction</p>
+            <p class="text-lg md:text-xl text-gray-300 mt-2">Badminton Premier League Auction</p>
             <div id="user-info" class="mt-4 text-xs text-gray-400">Connecting...</div>
             <div id="auction-info" class="mt-2 text-md text-yellow-300 font-orbitron hidden"></div>
         </header>
 
         <!-- Auction Hub -->
         <div id="auction-hub">
-            <div class="max-w-md mx-auto card rounded-2xl p-8 text-center">
+            <div class="max-w-md mx-auto card p-8 text-center">
                  <h2 class="text-3xl font-bold font-orbitron mb-6">Auction Hub</h2>
                 <div class="space-y-4">
-                    <button id="show-create-auction-btn" class="w-full btn btn-admin text-white font-bold py-3 px-8 rounded-lg text-lg">Create New Auction</button>
+                    <button id="show-create-auction-btn" class="w-full btn btn-admin font-bold py-3 px-8 text-lg">Create New Auction</button>
                     <div class="relative flex py-5 items-center"><div class="flex-grow border-t border-gray-600"></div><span class="flex-shrink mx-4 text-gray-400">OR</span><div class="flex-grow border-t border-gray-600"></div></div>
-                    <input type="text" id="join-code-input" placeholder="ENTER CODE TO MANAGE" class="w-full p-3 rounded-lg input-code focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+                    <input type="text" id="join-code-input" placeholder="ENTER CODE TO MANAGE" class="w-full p-4 input-code focus:ring-2 focus:ring-yellow-400 focus:outline-none">
                     <div class="flex gap-4">
-                        <button id="manage-auction-btn" class="w-full btn btn-action text-black font-bold py-3 px-8 rounded-lg text-lg">Manage</button>
-                        <button id="delete-auction-btn" class="w-1/3 btn bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg text-lg">Delete</button>
+                        <button id="manage-auction-btn" class="w-full btn btn-action font-bold py-3 px-8 text-lg">Manage</button>
+                        <button id="delete-auction-btn" class="w-1/3 btn bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8">Delete</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Main Admin Dashboard -->
-        <main id="admin-dashboard" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 space-y-6">
-                <div id="currentPlayerCard" class="card rounded-2xl p-6 text-center shadow-lg relative overflow-hidden">
-                    <div id="loading-state" class="flex flex-col items-center justify-center h-full min-h-[400px] text-gray-300"><svg class="animate-spin h-10 w-10 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p class="text-lg font-semibold">Enter an Auction Code to begin.</p></div>
-                    <div id="player-details" class="hidden"><h2 class="text-xl font-semibold text-gray-400 mb-2">Currently Bidding On</h2><img id="player-image" src="https://placehold.co/150x150/2a338a/ffffff?text=Player" class="w-36 h-36 rounded-full mx-auto mb-4 border-4 border-yellow-400 object-cover shadow-lg"><h3 id="player-name" class="text-4xl font-bold font-orbitron text-yellow-300 tracking-wide"></h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-lg"><div class="card p-4 rounded-xl"><p class="text-sm text-gray-400">Base Price</p><p id="base-price" class="text-2xl font-semibold font-orbitron"></p></div><div class="card p-4 rounded-xl"><p class="text-sm text-gray-400">Current Bid</p><p id="current-bid" class="text-3xl font-bold text-green-400 font-orbitron"></p></div></div><div class="mt-4 card p-4 rounded-xl"><p class="text-sm text-gray-400">Highest Bidder</p><p id="highest-bidder" class="text-2xl font-medium flex items-center justify-center gap-2"></p></div></div>
+        <main id="admin-dashboard" class="hidden flex flex-col gap-8">
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <!-- Player & Controls -->
+                <div class="lg:col-span-2 space-y-8">
+                    <div id="currentPlayerCard" class="card p-6 md:p-8 text-center shadow-lg relative overflow-hidden">
+                        <div id="loading-state" class="flex flex-col items-center justify-center h-full min-h-[350px] text-gray-300"><svg class="animate-spin h-10 w-10 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p class="text-lg font-semibold">Ready to start auction.</p></div>
+                        <div id="player-details" class="hidden">
+                            <h2 class="text-xl font-semibold text-gray-400 mb-2">Currently Bidding On</h2>
+                            <img id="player-image" src="https://placehold.co/150x150/2a338a/ffffff?text=Player" class="w-36 h-36 rounded-full mx-auto mb-4 border-4 border-yellow-400 object-cover shadow-lg">
+                            <h3 id="player-name" class="text-4xl font-bold font-orbitron text-yellow-300 tracking-wide"></h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-lg">
+                                <div class="bg-black/20 p-4 rounded-xl"><p class="text-sm text-gray-400">Base Price</p><p id="base-price" class="text-2xl font-semibold font-orbitron"></p></div>
+                                <div class="bg-black/20 p-4 rounded-xl"><p class="text-sm text-gray-400">Current Bid</p><p id="current-bid" class="text-3xl font-bold text-green-400 font-orbitron"></p></div>
+                            </div>
+                            <div class="mt-4 bg-black/20 p-4 rounded-xl"><p class="text-sm text-gray-400">Highest Bidder</p><div id="highest-bidder" class="text-2xl font-medium flex items-center justify-center gap-2 h-8"></div></div>
+                        </div>
+                    </div>
+                    <div id="admin-controls" class="card p-6 shadow-lg text-center"><h3 class="text-xl font-semibold mb-4">Auctioneer Controls</h3><div class="flex flex-col sm:flex-row gap-4 justify-center"><button id="start-next-bid-btn" class="btn btn-admin font-bold py-3 px-8">Start Next Bid</button><div id="in-bid-controls" class="flex gap-4 hidden"><button id="sell-player-btn" class="btn btn-action font-bold py-3 px-8">Sell Player</button><button id="pass-player-btn" class="btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8">Unsold / Pass</button></div><button id="reset-auction-btn" class="btn bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8">Reset Auction</button></div></div>
                 </div>
-                <div id="admin-controls" class="card rounded-2xl p-6 shadow-lg"><h3 class="text-xl font-semibold text-center mb-4">Auctioneer Controls</h3><div class="flex flex-col sm:flex-row gap-4 justify-center items-center"><button id="start-next-bid-btn" class="btn btn-admin text-white font-bold py-3 px-8 rounded-lg">Start Next Bid</button><div id="in-bid-controls" class="hidden flex gap-4"><button id="sell-player-btn" class="btn btn-action text-black font-bold py-3 px-8 rounded-lg">Sell Player</button><button id="pass-player-btn" class="btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg">Unsold / Pass</button></div><button id="reset-auction-btn" class="btn bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg">Reset Auction</button></div></div>
-            </div>
-            <div class="space-y-6">
-                <div class="card rounded-2xl p-6 shadow-lg">
-                    <h3 class="text-2xl font-bold text-center mb-4 font-orbitron text-yellow-300">Teams</h3>
-                    <div id="teams-container" class="space-y-3 max-h-[300px] overflow-y-auto pr-2"></div>
-                    <button id="show-add-team-btn" class="w-full mt-4 btn btn-admin text-white font-bold py-2 px-6 rounded-lg text-sm">Add Team</button>
-                </div>
-                <div class="card rounded-2xl p-6 shadow-lg">
-                     <h3 class="text-2xl font-bold text-center mb-4 font-orbitron text-yellow-300">Players Pool</h3>
-                    <ul id="unsold-players-list" class="space-y-2 max-h-[250px] overflow-y-auto pr-2"></ul>
-                    <div class="flex gap-2 mt-4">
-                        <button id="show-add-player-btn" class="w-full btn btn-admin text-white font-bold py-2 px-6 rounded-lg text-sm">Add Player</button>
-                        <button id="show-excel-upload-btn" class="w-full btn btn-admin text-white font-bold py-2 px-6 rounded-lg text-sm">Upload Excel</button>
+                <!-- Data Management -->
+                <div class="space-y-8">
+                    <div class="card p-6 shadow-lg">
+                        <h3 class="text-2xl font-bold text-center mb-4 font-orbitron text-yellow-300">Teams</h3>
+                        <div id="teams-container" class="space-y-2 max-h-[300px] overflow-y-auto pr-2"></div>
+                        <button id="show-add-team-btn" class="w-full mt-4 btn btn-admin text-sm font-bold py-2 px-6">Add Team</button>
+                    </div>
+                    <div class="card p-6 shadow-lg">
+                        <h3 class="text-2xl font-bold text-center mb-4 font-orbitron text-yellow-300">Players</h3>
+                        <ul id="unsold-players-list" class="space-y-2 max-h-[300px] overflow-y-auto pr-2 mb-4"></ul>
+                        <div class="flex flex-col gap-2">
+                            <button id="show-add-player-btn" class="w-full btn btn-admin text-sm font-bold py-2 px-6">Add Player</button>
+                            <button id="show-bulk-add-player-btn" class="w-full btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 px-6">Bulk Add Players</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </main>
-
+        
         <!-- Modals -->
-        <div id="messageBox" class="fixed bottom-5 right-5 bg-green-500 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10"></div>
-        <div id="create-auction-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-2xl font-bold font-orbitron mb-6 text-center">Create New Auction</h2><form id="create-auction-form" class="space-y-4"><input type="text" id="new-auction-code" placeholder="NEW AUCTION CODE" class="w-full p-3 rounded-lg input-form uppercase focus:ring-2 focus:ring-yellow-400 focus:outline-none"><div class="flex gap-4"><button type="submit" class="w-full btn btn-admin text-white font-bold py-3 rounded-lg">Create</button><button type="button" class="modal-close w-full btn bg-gray-600 text-white font-bold py-3 rounded-lg">Cancel</button></div></form></div></div>
-        <div id="add-team-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-2xl font-bold font-orbitron mb-6 text-center">Add New Team</h2><form id="add-team-form" class="space-y-4"><input type="text" id="team-id" placeholder="Team ID (e.g., T05)" class="w-full p-3 rounded-lg input-form uppercase focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="text" id="team-name" placeholder="Team Name" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="number" step="0.1" id="team-budget" placeholder="Budget (in Lakhs)" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><div class="flex gap-4"><button type="submit" class="w-full btn btn-admin text-white font-bold py-3 rounded-lg">Add Team</button><button type="button" class="modal-close w-full btn bg-gray-600 text-white font-bold py-3 rounded-lg">Cancel</button></div></form></div></div>
-        <div id="add-player-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-2xl font-bold font-orbitron mb-6 text-center">Add New Player</h2><form id="add-player-form" class="space-y-4"><input type="text" id="player-id" placeholder="Player ID (e.g., P09)" class="w-full p-3 rounded-lg input-form uppercase focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="text" id="player-name-input" placeholder="Player Name" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="number" step="0.1" id="player-base-price" placeholder="Base Price (in Lakhs)" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><input type="url" id="player-image-url" placeholder="Image URL (https://...)" class="w-full p-3 rounded-lg input-form focus:ring-2 focus:ring-yellow-400 focus:outline-none" required><div class="flex gap-4"><button type="submit" class="w-full btn btn-admin text-white font-bold py-3 rounded-lg">Add Player</button><button type="button" class="modal-close w-full btn bg-gray-600 text-white font-bold py-3 rounded-lg">Cancel</button></div></form></div></div>
-        <div id="excel-upload-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-2xl font-bold font-orbitron mb-6 text-center">Upload Players from Excel</h2><div class="space-y-4"><input type="file" id="excel-file-input" accept=".xlsx, .xls" class="w-full p-3 rounded-lg input-form"><p class="text-xs text-gray-400">Excel must have columns: ID, Name, Base Price, Image URL. For automatic upload of Google Drive images to Firebase Storage, use the provided Python script.</p><div class="flex gap-4"><button id="upload-excel-btn" class="w-full btn btn-admin text-white font-bold py-3 rounded-lg">Upload</button><button type="button" class="modal-close w-full btn bg-gray-600 text-white font-bold py-3 rounded-lg">Cancel</button></div></div></div></div>
-        <div id="purse-modal" class="modal"><div class="modal-content card rounded-2xl p-8"><h2 class="text-3xl font-bold text-center mb-6 font-orbitron text-yellow-300">Team Purses Remaining</h2><div id="purse-details" class="space-y-4"></div><button id="continue-btn" class="mt-8 w-full btn btn-admin text-white font-bold py-3 px-8 rounded-lg">OK</button></div></div>
-        <div id="confirm-modal" class="modal"><div class="modal-content card rounded-2xl p-8 text-center"><h2 class="text-2xl font-bold mb-4 font-orbitron">Are you sure?</h2><p id="confirm-text" class="text-gray-300 mb-6">This action cannot be undone.</p><div class="flex justify-center gap-4"><button id="confirm-yes-btn" class="btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-lg">Yes</button><button id="confirm-no-btn" class="btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-8 rounded-lg">Cancel</button></div></div></div>
+        <div id="messageBox" class="fixed bottom-5 right-5 bg-green-500 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10 z-50"></div>
+        <div id="confirm-modal" class="modal"><div class="modal-content card p-8 text-center"><h2 class="text-2xl font-bold mb-4 font-orbitron">Are you sure?</h2><p class="text-gray-300 mb-6">This action cannot be undone.</p><div class="flex justify-center gap-4"><button id="confirm-yes-btn" class="btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8">Yes</button><button id="confirm-no-btn" class="btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-8">Cancel</button></div></div></div>
+        <div id="create-auction-modal" class="modal"><div class="modal-content card p-8"><h2 class="text-2xl font-bold text-center mb-6 font-orbitron">Create New Auction</h2><form id="create-auction-form" class="space-y-4"><input type="text" id="new-auction-id" placeholder="Enter a Unique 6-Digit Code" class="w-full p-4 input-form" required maxlength="6"><button type="submit" class="w-full btn btn-admin font-bold py-3">Create</button><button type="button" class="modal-close-btn w-full btn bg-gray-600 text-white font-bold py-3 mt-2">Cancel</button></form></div></div>
+        <div id="add-team-modal" class="modal"><div class="modal-content card p-8"><h2 class="text-2xl font-bold text-center mb-6 font-orbitron">Add New Team</h2><form id="add-team-form" class="space-y-4"><input type="text" id="team-name" placeholder="Team Name" class="w-full p-4 input-form" required><input type="number" id="team-budget" placeholder="Budget (in Lakhs)" class="w-full p-4 input-form" required step="0.1"><textarea id="team-logo" placeholder="Team Logo (SVG Code)" class="w-full p-4 input-form" rows="3"></textarea><button type="submit" class="w-full btn btn-admin font-bold py-3">Add Team</button><button type="button" class="modal-close-btn w-full btn bg-gray-600 text-white font-bold py-3 mt-2">Cancel</button></form></div></div>
+        <div id="add-player-modal" class="modal"><div class="modal-content card p-8"><h2 class="text-2xl font-bold text-center mb-6 font-orbitron">Add New Player</h2><form id="add-player-form" class="space-y-4"><input type="text" id="player-name-input" placeholder="Player Name" class="w-full p-4 input-form" required><input type="number" id="player-base-price" placeholder="Base Price (in Lakhs)" class="w-full p-4 input-form" required step="0.1"><input type="text" id="player-image-url" placeholder="Image URL (Direct Link)" class="w-full p-4 input-form"><button type="submit" class="w-full btn btn-admin font-bold py-3">Add Player</button><button type="button" class="modal-close-btn w-full btn bg-gray-600 text-white font-bold py-3 mt-2">Cancel</button></form></div></div>
+        <div id="bulk-add-player-modal" class="modal"><div class="modal-content card p-8"><h2 class="text-2xl font-bold text-center mb-6 font-orbitron">Bulk Add Players via CSV</h2><form id="bulk-add-player-form" class="space-y-4"><p class="text-sm text-gray-400">Paste CSV data below. Format: name,basePrice,imageUrl. Each player on a new line.</p><textarea id="csv-data" placeholder="P.V. Sindhu,20.0,http://example.com/sindhu.jpg&#10;Saina Nehwal,18.0,http://example.com/saina.jpg" class="w-full p-4 input-form" rows="6" required></textarea><button type="submit" class="w-full btn btn-admin font-bold py-3">Add Players</button><button type="button" class="modal-close-btn w-full btn bg-gray-600 text-white font-bold py-3 mt-2">Cancel</button></form></div></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, writeBatch, query, getDocs, where, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, query, getDocs, where, writeBatch, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // --- DOM Elements ---
         const dom = {
             userInfo: document.getElementById('user-info'), auctionInfo: document.getElementById('auction-info'),
             auctionHub: document.getElementById('auction-hub'), adminDashboard: document.getElementById('admin-dashboard'),
             joinCodeInput: document.getElementById('join-code-input'), manageAuctionBtn: document.getElementById('manage-auction-btn'),
-            deleteAuctionBtn: document.getElementById('delete-auction-btn'), showCreateAuctionBtn: document.getElementById('show-create-auction-btn'),
-            loadingState: document.getElementById('loading-state'), playerDetails: document.getElementById('player-details'),
-            playerName: document.getElementById('player-name'), playerImage: document.getElementById('player-image'),
-            basePrice: document.getElementById('base-price'), currentBid: document.getElementById('current-bid'),
-            highestBidder: document.getElementById('highest-bidder'), teamsContainer: document.getElementById('teams-container'),
-            unsoldPlayersList: document.getElementById('unsold-players-list'), 
-            startNextBidBtn: document.getElementById('start-next-bid-btn'),
-            inBidControls: document.getElementById('in-bid-controls'),
-            sellPlayerBtn: document.getElementById('sell-player-btn'), 
-            passPlayerBtn: document.getElementById('pass-player-btn'),
-            resetAuctionBtn: document.getElementById('reset-auction-btn'),
-            showAddTeamBtn: document.getElementById('show-add-team-btn'), showAddPlayerBtn: document.getElementById('show-add-player-btn'),
-            showExcelUploadBtn: document.getElementById('show-excel-upload-btn'),
-            messageBox: document.getElementById('messageBox'),
-            createAuctionModal: document.getElementById('create-auction-modal'), createAuctionForm: document.getElementById('create-auction-form'),
-            addTeamModal: document.getElementById('add-team-modal'), addTeamForm: document.getElementById('add-team-form'),
-            addPlayerModal: document.getElementById('add-player-modal'), addPlayerForm: document.getElementById('add-player-form'),
-            excelUploadModal: document.getElementById('excel-upload-modal'), excelFileInput: document.getElementById('excel-file-input'),
-            uploadExcelBtn: document.getElementById('upload-excel-btn'),
-            purseModal: document.getElementById('purse-modal'), purseDetails: document.getElementById('purse-details'), continueBtn: document.getElementById('continue-btn'),
-            confirmModal: document.getElementById('confirm-modal'), confirmYes: document.getElementById('confirm-yes-btn'),
-            confirmNo: document.getElementById('confirm-no-btn'), confirmText: document.getElementById('confirm-text'),
-            currentPlayerCard: document.getElementById('currentPlayerCard'),
+            deleteAuctionBtn: document.getElementById('delete-auction-btn'), loadingState: document.getElementById('loading-state'),
+            playerDetails: document.getElementById('player-details'), playerName: document.getElementById('player-name'),
+            playerImage: document.getElementById('player-image'), basePrice: document.getElementById('base-price'),
+            currentBid: document.getElementById('current-bid'), highestBidder: document.getElementById('highest-bidder'),
+            teamsContainer: document.getElementById('teams-container'), unsoldPlayersList: document.getElementById('unsold-players-list'),
+            adminControls: document.getElementById('admin-controls'), startNextBidBtn: document.getElementById('start-next-bid-btn'),
+            inBidControls: document.getElementById('in-bid-controls'), sellPlayerBtn: document.getElementById('sell-player-btn'),
+            passPlayerBtn: document.getElementById('pass-player-btn'), resetAuctionBtn: document.getElementById('reset-auction-btn'),
+            messageBox: document.getElementById('messageBox'), confirmModal: document.getElementById('confirm-modal'),
+            confirmYesBtn: document.getElementById('confirm-yes-btn'), confirmNoBtn: document.getElementById('confirm-no-btn'),
+            createAuctionModal: document.getElementById('create-auction-modal'), showCreateAuctionBtn: document.getElementById('show-create-auction-btn'),
+            createAuctionForm: document.getElementById('create-auction-form'), newAuctionIdInput: document.getElementById('new-auction-id'),
+            addTeamModal: document.getElementById('add-team-modal'), showAddTeamBtn: document.getElementById('show-add-team-btn'), addTeamForm: document.getElementById('add-team-form'),
+            addPlayerModal: document.getElementById('add-player-modal'), showAddPlayerBtn: document.getElementById('show-add-player-btn'), addPlayerForm: document.getElementById('add-player-form'),
+            bulkAddPlayerModal: document.getElementById('bulk-add-player-modal'), showBulkAddPlayerBtn: document.getElementById('show-bulk-add-player-btn'), bulkAddPlayerForm: document.getElementById('bulk-add-player-form'),
+            csvDataInput: document.getElementById('csv-data')
         };
 
+        // --- App State & Config ---
         let app, db, auth, userId, auctionId;
         let teamsData = {};
         let listeners = [];
         const appId = 'aikya2k25-auction';
         const firebaseConfig = { apiKey: "AIzaSyBNKUEPNcJEBXTk_Yc580eVVy8Mz0e5rDs", authDomain: "aikya2k25-11df9.firebaseapp.com", projectId: "aikya2k25-11df9" };
 
-        const showMessage = (message, isError = false) => { dom.messageBox.textContent = message; dom.messageBox.className = `fixed bottom-5 right-5 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10 ${isError ? 'bg-red-500' : 'bg-green-500'}`; requestAnimationFrame(() => { dom.messageBox.classList.remove('opacity-0', 'translate-y-10'); }); setTimeout(() => dom.messageBox.classList.add('opacity-0', 'translate-y-10'), 3000); };
-        async function initializeFirebase() { try { app = initializeApp(firebaseConfig); db = getFirestore(app); auth = getAuth(app); onAuthStateChanged(auth, async (user) => { if (user) { userId = user.uid; dom.userInfo.textContent = `Admin User ID: ${userId}`; } else { await signInAnonymously(auth); } }); } catch (error) { console.error("Firebase Init Error:", error); dom.userInfo.textContent = "Connection Error."; } }
+        // --- Utility Functions ---
+        const formatToLakhs = (amount) => `${Number(amount).toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} L`;
+        const showMessage = (message, isError = false) => { dom.messageBox.textContent = message; dom.messageBox.className = `fixed bottom-5 right-5 text-white py-3 px-6 rounded-lg shadow-xl opacity-0 transform translate-y-10 z-50 ${isError ? 'bg-red-500' : 'bg-green-500'}`; requestAnimationFrame(() => dom.messageBox.classList.remove('opacity-0', 'translate-y-10')); setTimeout(() => dom.messageBox.classList.add('opacity-0', 'translate-y-10'), 3000); };
+        const showModal = (modal) => { modal.style.display = 'flex'; };
+        const hideModal = (modal) => { modal.style.display = 'none'; };
+        
+        // --- Firebase & Auth ---
+        async function initializeFirebase() { try { app = initializeApp(firebaseConfig); db = getFirestore(app); auth = getAuth(app); onAuthStateChanged(auth, user => { if (user) { userId = user.uid; dom.userInfo.textContent = `Connected as Admin: ${userId.substring(0, 8)}...`; } }); await signInAnonymously(auth); } catch (error) { console.error("Firebase Init Error:", error); dom.userInfo.textContent = "Connection Error."; } }
+        
         const getAuctionDoc = (id, ...path) => doc(db, `artifacts/${appId}/public/data/badminton-auctions`, id, ...path);
         const getAuctionCol = (id, ...path) => collection(db, `artifacts/${appId}/public/data/badminton-auctions`, id, ...path);
-
-        async function handleCreateAuction(e) { e.preventDefault(); const newCode = e.target.elements['new-auction-code'].value.toUpperCase(); if (!newCode) return showMessage("Auction code cannot be empty.", true); const stateRef = getAuctionDoc(newCode, 'state', 'auctionState'); const docSnap = await getDoc(stateRef); if (docSnap.exists()) return showMessage(`Auction code '${newCode}' already exists.`, true); const batch = writeBatch(db); const stateData = { adminId: userId, currentPlayerId: null, currentBid: 0, highestBidder: 'None', status: 'not_started' }; batch.set(stateRef, stateData); batch.set(getAuctionDoc(newCode), { createdAt: new Date(), code: newCode }); await batch.commit(); showMessage(`Auction '${newCode}' created successfully!`, false); dom.createAuctionModal.style.display = 'none'; dom.joinCodeInput.value = newCode; handleManageAuction(); }
-        async function handleAddTeam(e) { e.preventDefault(); const teamId = e.target.elements['team-id'].value.toUpperCase(); const teamName = e.target.elements['team-name'].value; const teamBudget = parseFloat(e.target.elements['team-budget'].value); if (!teamId || !teamName || isNaN(teamBudget)) return showMessage("All fields are required.", true); const teamRef = getAuctionDoc(auctionId, 'teams', teamId); const logos = ['🏸', '🏆', '🥇', '🚀']; const teamData = { id: teamId, name: teamName, budget: teamBudget, captainId: null, players: [], logo: logos[Math.floor(Math.random() * logos.length)] }; await setDoc(teamRef, teamData); showMessage(`Team '${teamName}' added successfully.`, false); dom.addTeamModal.style.display = 'none'; e.target.reset(); }
-        async function handleAddPlayer(e) { e.preventDefault(); const playerId = e.target.elements['player-id'].value.toUpperCase(); const playerName = e.target.elements['player-name-input'].value; const basePrice = parseFloat(e.target.elements['player-base-price'].value); const imageUrl = e.target.elements['player-image-url'].value; if (!playerId || !playerName || isNaN(basePrice) || !imageUrl) return showMessage("All fields are required.", true); const playerRef = getAuctionDoc(auctionId, 'players', playerId); const playerData = { id: playerId, name: playerName, basePrice: basePrice, imageUrl: imageUrl, status: 'unsold' }; await setDoc(playerRef, playerData); showMessage(`Player '${playerName}' added successfully.`, false); dom.addPlayerModal.style.display = 'none'; e.target.reset(); }
-        async function handleDeleteAuction() { const code = dom.joinCodeInput.value.toUpperCase(); if (!code) return showMessage("Enter an auction code to delete.", true); const stateRef = getAuctionDoc(code, 'state', 'auctionState'); const stateSnap = await getDoc(stateRef); if (!stateSnap.exists()) return showMessage("Auction not found.", true); if (stateSnap.data().adminId !== userId) return showMessage("Access Denied: You are not the admin.", true); confirmAction(`Are you sure you want to permanently delete auction '${code}'? This cannot be undone.`, async () => { await deleteDoc(stateRef); await deleteDoc(getAuctionDoc(code)); showMessage(`Auction '${code}' has been deleted.`, false); if(auctionId === code) location.reload(); }); }
         
-        async function handleExcelUpload() {
-            const file = dom.excelFileInput.files[0];
-            if (!file) return showMessage("Please select an Excel file.", true);
+        // --- Auction Management ---
+        async function handleCreateAuction(e) {
+            e.preventDefault();
+            const newId = dom.newAuctionIdInput.value.toUpperCase();
+            if (newId.length !== 6) return showMessage("Auction code must be 6 characters.", true);
+            
+            const stateRef = getAuctionDoc(newId, 'state', 'auctionState');
+            if ((await getDoc(stateRef)).exists()) return showMessage("This auction code already exists.", true);
+            
+            await setDoc(stateRef, { adminId: userId, status: 'not_started', currentPlayerId: null, currentBid: 0, highestBidder: 'None' });
+            showMessage(`Auction ${newId} created successfully!`, false);
+            hideModal(dom.createAuctionModal);
+            dom.joinCodeInput.value = newId;
+        }
+        
+        async function enterAdminDashboard() {
+            const code = dom.joinCodeInput.value.toUpperCase();
+            if (!code) return showMessage("Please enter an auction code.", true);
 
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-                    const players = XLSX.utils.sheet_to_json(worksheet);
-
-                    if (players.length === 0) return showMessage("No players found in the Excel file.", true);
-
-                    const batch = writeBatch(db);
-                    let count = 0;
-                    players.forEach(player => {
-                        const id = player.ID || player.Id;
-                        const name = player.Name || player.name;
-                        const basePrice = player['Base Price'] || player['basePrice'] || player.baseprice;
-                        const imageUrl = player['Image URL'] || player['imageUrl'] || player.imageurl;
-
-                        if (id && name && basePrice && imageUrl) {
-                            const playerRef = getAuctionDoc(auctionId, 'players', String(id).toUpperCase());
-                            const playerData = { id: String(id).toUpperCase(), name, basePrice: parseFloat(basePrice), imageUrl, status: 'unsold' };
-                            batch.set(playerRef, playerData);
-                            count++;
-                        }
-                    });
-
-                    await batch.commit();
-                    showMessage(`${count} players uploaded successfully from Excel.`, false);
-                    dom.excelUploadModal.style.display = 'none';
-                } catch (error) {
-                    console.error("Error processing Excel file:", error);
-                    showMessage("Failed to process Excel file. Check format and content.", true);
-                }
-            };
-            reader.readAsArrayBuffer(file);
+            const stateRef = getAuctionDoc(code, 'state', 'auctionState');
+            const stateSnap = await getDoc(stateRef);
+            if (!stateSnap.exists()) return showMessage("Invalid auction code.", true);
+            if (stateSnap.data().adminId !== userId) return showMessage("You are not the admin of this auction.", true);
+            
+            auctionId = code;
+            dom.auctionHub.classList.add('hidden');
+            dom.adminDashboard.classList.remove('hidden');
+            dom.auctionInfo.innerHTML = `MANAGING AUCTION: <span class="tracking-widest">${auctionId}</span>`;
+            dom.auctionInfo.classList.remove('hidden');
+            setupListeners();
         }
 
-        async function handleManageAuction() { const code = dom.joinCodeInput.value.toUpperCase(); if (!code) return showMessage("Please enter an auction code.", true); const stateRef = getAuctionDoc(code, 'state', 'auctionState'); const stateSnap = await getDoc(stateRef); if (!stateSnap.exists()) return showMessage("Auction code not found.", true); const stateData = stateSnap.data(); if (stateData.adminId !== userId) { return showMessage("Access Denied: You are not the admin for this auction.", true); } auctionId = code; enterAdminDashboard(); }
-        function enterAdminDashboard() { dom.auctionHub.classList.add('hidden'); dom.adminDashboard.classList.remove('hidden'); dom.adminDashboard.classList.add('grid'); dom.auctionInfo.innerHTML = `MANAGING AUCTION: <span class="tracking-widest">${auctionId}</span>`; dom.auctionInfo.classList.remove('hidden'); setupListeners(); }
-        function setupListeners() { listeners.forEach(unsub => unsub()); listeners = []; listeners.push(onSnapshot(getAuctionDoc(auctionId, 'state', 'auctionState'), updateAuctionStateUI)); const playersQuery = query(getAuctionCol(auctionId, 'players'), where("status", "==", "unsold")); listeners.push(onSnapshot(playersQuery, snap => updateUnsoldPlayersUI(snap.docs.map(d => d.data())))); listeners.push(onSnapshot(getAuctionCol(auctionId, 'teams'), snap => { const teams = snap.docs.map(d => ({id: d.id, ...d.data()})); teamsData = teams.reduce((acc, team) => ({ ...acc, [team.id]: team }), {}); updateTeamsUI(teams); })); }
+        async function handleDeleteAuction() {
+            const code = dom.joinCodeInput.value.toUpperCase();
+            if (!code) return showMessage("Please enter an auction code to delete.", true);
+            confirmAction(`This will permanently delete auction '${code}' and all its data.`, async () => {
+                // This is a simplified delete. For very large subcollections, a cloud function is better.
+                const collectionsToDelete = ['players', 'teams', 'state'];
+                const batch = writeBatch(db);
+                for (const coll of collectionsToDelete) {
+                    const snapshot = await getDocs(getAuctionCol(code, coll));
+                    snapshot.forEach(doc => batch.delete(doc.ref));
+                }
+                await batch.commit();
+                showMessage(`Auction ${code} deleted.`, false);
+            });
+        }
+
+        function setupListeners() {
+            listeners.forEach(unsub => unsub()); listeners = [];
+            listeners.push(onSnapshot(getAuctionDoc(auctionId, 'state', 'auctionState'), updateAuctionStateUI));
+            const playersQuery = query(getAuctionCol(auctionId, 'players'), where("status", "==", "unsold"));
+            listeners.push(onSnapshot(playersQuery, snap => updateUnsoldPlayersUI(snap.docs.map(d => d.data()))));
+            listeners.push(onSnapshot(getAuctionCol(auctionId, 'teams'), snap => {
+                const teams = snap.docs.map(d => ({id:d.id, ...d.data()}));
+                teamsData = teams.reduce((acc, team) => ({ ...acc, [team.id]: team }), {});
+                updateTeamsUI(teams);
+            }));
+        }
         
         async function updateAuctionStateUI(docSnap) {
             if (!docSnap.exists()) return;
             const state = docSnap.data();
             const hasPlayer = state.status === 'in_progress' && state.currentPlayerId;
-
             dom.loadingState.style.display = hasPlayer ? 'none' : 'flex';
-            dom.loadingState.querySelector('p').textContent = 'Ready to start next bid...';
             dom.playerDetails.style.display = hasPlayer ? 'block' : 'none';
             dom.startNextBidBtn.classList.toggle('hidden', hasPlayer);
             dom.inBidControls.classList.toggle('hidden', !hasPlayer);
-            dom.sellPlayerBtn.disabled = state.highestBidder === 'None';
             dom.currentPlayerCard.classList.toggle('card-glow', hasPlayer);
 
             if (hasPlayer) {
@@ -239,55 +267,183 @@
                 dom.playerName.textContent = player.name;
                 dom.playerImage.src = player.imageUrl || 'https://placehold.co/150x150/2a338a/ffffff?text=Player';
                 dom.playerImage.onerror = () => { dom.playerImage.src = 'https://placehold.co/150x150/2a338a/ffffff?text=Error'; };
-                dom.basePrice.textContent = `${Number(player.basePrice).toFixed(1)} L`;
-                dom.currentBid.textContent = `${Number(state.currentBid).toFixed(1)} L`;
+                dom.basePrice.textContent = formatToLakhs(player.basePrice);
+                dom.currentBid.textContent = formatToLakhs(state.currentBid);
                 const bidderTeam = teamsData[state.highestBidder];
-                dom.highestBidder.innerHTML = bidderTeam ? `${bidderTeam.logo || ''} ${bidderTeam.name}` : 'None';
+                dom.highestBidder.innerHTML = bidderTeam ? `<span class="text-2xl">${bidderTeam.logo || '🏆'}</span> ${bidderTeam.name}` : 'None';
             }
         }
         
-        const updateUnsoldPlayersUI = (players) => { dom.unsoldPlayersList.innerHTML = players.length === 0 ? '<li class="text-gray-400 text-center">All players sold!</li>' : players.map(p => `<li class="flex justify-between items-center bg-indigo-900/50 p-2 rounded-lg"><span>${p.name}</span><span class="font-semibold text-sm text-gray-300">${Number(p.basePrice).toFixed(1)} L</span></li>`).join(''); };
-        const updateTeamsUI = (teams) => { dom.teamsContainer.innerHTML = teams.map(t => `<div class="card p-4 rounded-lg"><div class="flex items-center justify-between"><div class="flex items-center gap-3"><span class="text-2xl">${t.logo || '🏆'}</span><h4 class="font-bold text-lg truncate" title="${t.name}">${t.name}</h4></div><span class="font-semibold text-green-400 font-orbitron text-lg">${Number(t.budget).toFixed(1)} L</span></div><p class="text-xs text-gray-400 mt-2">Players: ${t.players.join(', ') || 'None'}</p></div>`).join(''); };
-        
-        async function handleSellPlayer() { const stateRef = getAuctionDoc(auctionId, 'state', 'auctionState'); const state = (await getDoc(stateRef)).data(); if (!state.currentPlayerId || state.highestBidder === 'None') return; const playerRef = getAuctionDoc(auctionId, 'players', state.currentPlayerId); const teamRef = getAuctionDoc(auctionId, 'teams', state.highestBidder); const teamDoc = teamsData[state.highestBidder]; const player = (await getDoc(playerRef)).data(); const batch = writeBatch(db); batch.update(playerRef, { status: 'sold', soldTo: teamDoc.name, soldFor: state.currentBid }); batch.update(teamRef, { budget: teamDoc.budget - state.currentBid, players: [...teamDoc.players, player.name] }); batch.update(stateRef, { status: 'sold' }); await batch.commit(); showMessage(`${player.name} sold to ${teamDoc.name} for ${Number(state.currentBid).toFixed(1)} L!`, false); showPurseModal(); }
-        async function handlePassPlayer() {
+        // --- Auction Controls ---
+        async function handleStartNextBid() {
+            const playersQuery = query(getAuctionCol(auctionId, 'players'), where("status", "==", "unsold"));
+            const playersSnapshot = await getDocs(playersQuery);
             const stateRef = getAuctionDoc(auctionId, 'state', 'auctionState');
-            await updateDoc(stateRef, { status: 'not_started', currentPlayerId: null, currentBid: 0, highestBidder: 'None'});
-            showMessage('Player returned to the unsold pool.');
+            if (playersSnapshot.empty) {
+                await updateDoc(stateRef, { status: 'finished', currentPlayerId: null });
+                return showMessage("Auction finished! All players sold.", false);
+            }
+            // Randomly select next player
+            const randomIndex = Math.floor(Math.random() * playersSnapshot.docs.length);
+            const nextPlayerDoc = playersSnapshot.docs[randomIndex];
+            await updateDoc(stateRef, { status: 'in_progress', currentPlayerId: nextPlayerDoc.id, currentBid: nextPlayerDoc.data().basePrice, highestBidder: 'None' });
+            showMessage(`Bidding starts for ${nextPlayerDoc.data().name}!`, false);
         }
 
-        async function handleStartNextBid() { const playersQuery = query(getAuctionCol(auctionId, 'players'), where("status", "==", "unsold")); const playersSnapshot = await getDocs(playersQuery); const stateRef = getAuctionDoc(auctionId, 'state', 'auctionState'); const unsoldPlayers = playersSnapshot.docs; if (unsoldPlayers.length === 0) { await updateDoc(stateRef, { status: 'finished', currentPlayerId: null }); return showMessage("Auction finished! All players sold.", true); } const randomIndex = Math.floor(Math.random() * unsoldPlayers.length); const nextPlayerDoc = unsoldPlayers[randomIndex]; await updateDoc(stateRef, { status: 'in_progress', currentPlayerId: nextPlayerDoc.id, currentBid: nextPlayerDoc.data().basePrice, highestBidder: 'None' }); showMessage(`Bidding starts for ${nextPlayerDoc.data().name}!`, false); }
-        function showPurseModal() { dom.purseDetails.innerHTML = Object.values(teamsData).map(t => `<div class="flex justify-between items-center bg-indigo-900/50 p-3 rounded-lg"><span class="font-semibold flex items-center gap-2">${t.logo || ''} ${t.name}</span><span class="font-bold text-green-400 font-orbitron">${Number(t.budget).toFixed(1)} L</span></div>`).join(''); dom.purseModal.style.display = 'flex'; }
-        async function handleReset() { const playersSnapshot = await getDocs(getAuctionCol(auctionId, 'players')); const teamsSnapshot = await getDocs(getAuctionCol(auctionId, 'teams')); const batch = writeBatch(db); playersSnapshot.forEach(doc => batch.update(doc.ref, { status: 'unsold', soldFor: null, soldTo: null })); teamsSnapshot.forEach(doc => batch.update(doc.ref, { players: [], budget: 100.0, captainId: null })); const stateRef = getAuctionDoc(auctionId, 'state', 'auctionState'); batch.update(stateRef, { currentPlayerId: null, currentBid: 0, highestBidder: 'None', status: 'not_started' }); await batch.commit(); showMessage("Auction has been reset.", false); }
+        async function handleSellPlayer() {
+            const stateRef = getAuctionDoc(auctionId, 'state', 'auctionState');
+            const state = (await getDoc(stateRef)).data();
+            if (!state.currentPlayerId || state.highestBidder === 'None') return showMessage("No highest bidder to sell to.", true);
+
+            const playerRef = getAuctionDoc(auctionId, 'players', state.currentPlayerId);
+            const teamRef = getAuctionDoc(auctionId, 'teams', state.highestBidder);
+            const teamData = teamsData[state.highestBidder];
+            const playerData = (await getDoc(playerRef)).data();
+
+            const batch = writeBatch(db);
+            batch.update(playerRef, { status: 'sold', soldTo: teamData.name, soldFor: state.currentBid });
+            batch.update(teamRef, { budget: teamData.budget - state.currentBid, players: [...teamData.players, playerData.name] });
+            batch.update(stateRef, { status: 'sold' });
+            await batch.commit();
+
+            const soldMsg = `${playerData.name} sold to ${teamData.name} for ${formatToLakhs(state.currentBid)}`;
+            showMessage(soldMsg, false);
+        }
+        
+        async function handlePassPlayer() {
+            const stateRef = getAuctionDoc(auctionId, 'state', 'auctionState');
+            const state = (await getDoc(stateRef)).data();
+            if (!state.currentPlayerId) return;
+            const playerRef = getAuctionDoc(auctionId, 'players', state.currentPlayerId);
+            const playerName = (await getDoc(playerRef)).data().name;
+            await updateDoc(stateRef, { status: 'not_started', currentPlayerId: null, currentBid: 0, highestBidder: 'None' });
+            showMessage(`${playerName} is unsold and returned to the pool.`, false);
+        }
+        
+        async function handleResetAuction() {
+             confirmAction("This will reset all bids and player statuses for this auction.", async () => {
+                const batch = writeBatch(db);
+                // Reset players
+                const playersSnap = await getDocs(getAuctionCol(auctionId, 'players'));
+                playersSnap.forEach(doc => {
+                    batch.update(doc.ref, { status: 'unsold', soldFor: null, soldTo: null });
+                });
+                // Reset teams
+                const teamsSnap = await getDocs(getAuctionCol(auctionId, 'teams'));
+                 teamsSnap.forEach(async (doc) => {
+                     const teamData = doc.data();
+                     // Here you might need a "baseBudget" field, or reset to a fixed value e.g., 100
+                     const originalBudget = teamData.baseBudget || 100.0; 
+                     batch.update(doc.ref, { players: [], budget: originalBudget });
+                 });
+
+                await batch.commit();
+                await updateDoc(getAuctionDoc(auctionId, 'state', 'auctionState'), { status: 'not_started', currentPlayerId: null, currentBid: 0, highestBidder: 'None' });
+                showMessage("Auction has been reset.", false);
+            });
+        }
+        
+        // --- Data Management UI ---
+        const updateUnsoldPlayersUI = (players) => { dom.unsoldPlayersList.innerHTML = players.length === 0 ? '<li class="text-gray-400 text-center">No unsold players.</li>' : players.map(p => `<li class="flex justify-between items-center bg-black/20 p-2 rounded-lg"><span>${p.name}</span><span class="font-semibold text-sm text-gray-300">${formatToLakhs(p.basePrice)}</span></li>`).join(''); };
+        const updateTeamsUI = (teams) => { dom.teamsContainer.innerHTML = teams.map(t => `<div class="card p-3 rounded-lg flex flex-col gap-2"><div class="flex items-start justify-between gap-4"><div class="flex items-center gap-3"><span class="text-2xl">${t.logo || '🏆'}</span><h4 class="font-bold text-md leading-tight">${t.name}</h4></div><span class="font-semibold text-green-400 font-orbitron whitespace-nowrap">${formatToLakhs(t.budget)}</span></div><div class="pl-10"><p class="text-xs text-gray-400 leading-tight"><span class="font-semibold text-gray-300">Players:</span> ${t.players.join(', ') || 'None'}</p></div></div>`).join(''); };
         let confirmCallback = null;
-        function confirmAction(text, callback) { confirmCallback = callback; dom.confirmText.textContent = text; dom.confirmModal.style.display = 'flex'; }
+        function confirmAction(message, callback) { confirmCallback = callback; document.querySelector('#confirm-modal p').textContent = message; showModal(dom.confirmModal); }
+
+        // --- Form Handlers ---
+        async function handleAddTeam(e) {
+            e.preventDefault();
+            const name = e.target.elements['team-name'].value;
+            const budget = parseFloat(e.target.elements['team-budget'].value);
+            const logo = e.target.elements['team-logo'].value;
+            if (!name || !budget) return showMessage("Name and budget are required.", true);
+            const teamId = 'T' + String(Date.now()).slice(-5);
+            await setDoc(getAuctionDoc(auctionId, 'teams', teamId), { id: teamId, name, budget, baseBudget: budget, players: [], captainId: null, logo });
+            showMessage(`Team ${name} added.`, false);
+            e.target.reset();
+            hideModal(dom.addTeamModal);
+        }
+
+        async function handleAddPlayer(e) {
+            e.preventDefault();
+            const name = e.target.elements['player-name-input'].value;
+            const basePrice = parseFloat(e.target.elements['player-base-price'].value);
+            const imageUrl = e.target.elements['player-image-url'].value;
+            if (!name || !basePrice) return showMessage("Name and base price are required.", true);
+            const playerId = 'P' + String(Date.now()).slice(-5);
+            await setDoc(getAuctionDoc(auctionId, 'players', playerId), { id: playerId, name, basePrice, status: 'unsold', imageUrl });
+            showMessage(`Player ${name} added.`, false);
+            e.target.reset();
+            hideModal(dom.addPlayerModal);
+        }
         
+        async function handleBulkAddPlayers(e) {
+            e.preventDefault();
+            const csvText = dom.csvDataInput.value.trim();
+            if (!csvText) return showMessage("CSV data cannot be empty.", true);
+
+            const rows = csvText.split('\n').filter(row => row.trim() !== '');
+            if (rows.length === 0) return showMessage("No valid player data found.", true);
+
+            try {
+                const batch = writeBatch(db);
+                let count = 0;
+                rows.forEach(row => {
+                    const [name, basePriceStr, imageUrl] = row.split(',').map(s => s.trim());
+                    const basePrice = parseFloat(basePriceStr);
+
+                    if (name && !isNaN(basePrice)) {
+                        const playerId = 'P' + String(Date.now() + count).slice(-6);
+                        const playerData = {
+                            id: playerId,
+                            name: name,
+                            basePrice: basePrice,
+                            status: 'unsold',
+                            imageUrl: imageUrl || ''
+                        };
+                        batch.set(getAuctionDoc(auctionId, 'players', playerId), playerData);
+                        count++;
+                    }
+                });
+
+                if (count > 0) {
+                    await batch.commit();
+                    showMessage(`${count} players added successfully.`, false);
+                    e.target.reset();
+                    hideModal(dom.bulkAddPlayerModal);
+                } else {
+                    showMessage("Could not parse any players. Check format.", true);
+                }
+            } catch (error) {
+                console.error("Bulk add error:", error);
+                showMessage("An error occurred during bulk add.", true);
+            }
+        }
+
         // --- Event Listeners ---
-        dom.showCreateAuctionBtn.addEventListener('click', () => dom.createAuctionModal.style.display = 'flex');
+        dom.showCreateAuctionBtn.addEventListener('click', () => showModal(dom.createAuctionModal));
         dom.createAuctionForm.addEventListener('submit', handleCreateAuction);
-        dom.showAddTeamBtn.addEventListener('click', () => dom.addTeamModal.style.display = 'flex');
-        dom.addTeamForm.addEventListener('submit', handleAddTeam);
-        dom.showAddPlayerBtn.addEventListener('click', () => dom.addPlayerModal.style.display = 'flex');
-        dom.addPlayerForm.addEventListener('submit', handleAddPlayer);
-        dom.showExcelUploadBtn.addEventListener('click', () => dom.excelUploadModal.style.display = 'flex');
-        dom.uploadExcelBtn.addEventListener('click', handleExcelUpload);
-        
-        document.querySelectorAll('.modal-close').forEach(btn => { btn.closest('.modal').addEventListener('click', (e) => { if (e.target === btn.closest('.modal') || e.target === btn) { btn.closest('.modal').style.display = 'none'; } }); });
-        
-        dom.manageAuctionBtn.addEventListener('click', handleManageAuction);
+        dom.manageAuctionBtn.addEventListener('click', enterAdminDashboard);
         dom.deleteAuctionBtn.addEventListener('click', handleDeleteAuction);
+        dom.confirmYesBtn.addEventListener('click', () => { if (confirmCallback) confirmCallback(); hideModal(dom.confirmModal); });
+        dom.confirmNoBtn.addEventListener('click', () => { confirmCallback = null; hideModal(dom.confirmModal); });
+        
+        // Modal close buttons
+        document.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', (e) => hideModal(e.target.closest('.modal'))));
+        
+        // Dashboard buttons
         dom.startNextBidBtn.addEventListener('click', handleStartNextBid);
         dom.sellPlayerBtn.addEventListener('click', handleSellPlayer);
         dom.passPlayerBtn.addEventListener('click', handlePassPlayer);
-        dom.resetAuctionBtn.addEventListener('click', () => { if (!auctionId) return showMessage("No auction loaded.", true); confirmAction(`Are you sure you want to reset all progress for auction '${auctionId}'?`, handleReset); });
-        dom.continueBtn.addEventListener('click', async () => {
-             dom.purseModal.style.display = 'none';
-             const stateRef = getAuctionDoc(auctionId, 'state', 'auctionState');
-             await updateDoc(stateRef, { status: 'not_started', currentPlayerId: null, currentBid: 0, highestBidder: 'None'});
-        });
-        dom.confirmYes.addEventListener('click', () => { if (confirmCallback) confirmCallback(); dom.confirmModal.style.display = 'none'; });
-        dom.confirmNo.addEventListener('click', () => { confirmCallback = null; dom.confirmModal.style.display = 'none'; });
+        dom.resetAuctionBtn.addEventListener('click', handleResetAuction);
         
+        // Data forms
+        dom.showAddTeamBtn.addEventListener('click', () => showModal(dom.addTeamModal));
+        dom.addTeamForm.addEventListener('submit', handleAddTeam);
+        dom.showAddPlayerBtn.addEventListener('click', () => showModal(dom.addPlayerModal));
+        dom.addPlayerForm.addEventListener('submit', handleAddPlayer);
+        dom.showBulkAddPlayerBtn.addEventListener('click', () => showModal(dom.bulkAddPlayerModal));
+        dom.bulkAddPlayerForm.addEventListener('submit', handleBulkAddPlayers);
+
         initializeFirebase();
     </script>
 </body>
